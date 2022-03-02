@@ -1,47 +1,28 @@
-import React, { useState } from 'react';
-import Table from "./components/common/Table";
-import Form from './components/common/Form'
-
+import React from 'react';
 // import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
+import {PeoplePage} from "./components/pages/PeoplePage/PeoplePage";
+import {PlanetsPage} from "./components/pages/PlanetsPage/PlanetsPage";
+import {StarshipsPage} from "./components/pages/StarshipsPage/StarshipsPage";
+import {Navbar} from "./components/common/Navbar";
+import {Route, Routes, Navigate} from "react-router-dom";
 
 function App() {
-    const [people, setPeople] = useState(data);
-    console.log(people);
-
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
-    }
-
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
 
     return (
-        <div className="container">
-            <Table
-                data={people}
-                columns={columns}
-                tableDescriptor="People"
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
-            />
-        </div>
+        <>
+            <Navbar/>
+            <div className="container">
+                <Routes>
+                    <Route path={'*'} element={<Navigate to={"/not-found"}/>}/>
+                    <Route path={'/not-found'} element={<h1>Page not found</h1>}/>
+                    <Route exact path="/" element={<Navigate to={"/people"}/>}/>
+                    <Route path="/people" element={<PeoplePage/>}/>
+                    <Route path="/planets" element={<PlanetsPage/>}/>
+                    <Route path="/starships" element={<StarshipsPage/>}/>
+                </Routes>
+            </div>
+        </>
     );
 }
 

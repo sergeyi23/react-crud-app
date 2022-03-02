@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Input from "./Input";
 import Button from "./Button";
 
@@ -12,7 +12,7 @@ const Form = ({columns, initialData, onAddData}) => {
     }
 
     const handleChange = (event) => {
-        const { currentTarget : input } = event;
+        const {currentTarget: input} = event;
         const data = {...personData};
         data[input.name] = input.value;
         setPersonData(data)
@@ -21,14 +21,14 @@ const Form = ({columns, initialData, onAddData}) => {
 
     return (
         <form>
-            {columns.map( columnName => (
+            {columns.map(columnName => (
                 <Input
-                key={columnName}
-                name={columnName}
-                label={columnName}
-                value={personData[columnName]}
-                type="input"
-                onChange={handleChange}
+                    key={columnName}
+                    name={columnName}
+                    label={columnName}
+                    value={personData[columnName]}
+                    type="input"
+                    onChange={handleChange}
                 />
             ))}
             <Button
