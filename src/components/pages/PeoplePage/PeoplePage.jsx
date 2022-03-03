@@ -53,19 +53,21 @@ export const PeoplePage = () => {
     }
 
     return (
-        <>
-            <h1>People page</h1>
-            <Table
-                data={people}
-                columns={columns}
-                tableDescriptor="People"
-                deleteItem={deletePerson}
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
-            />
-        </>
+        (people.length)
+            ? <>
+                <h1>People page</h1>
+                <Table
+                    data={people}
+                    columns={columns}
+                    tableDescriptor="People"
+                    deleteItem={deletePerson}
+                />
+                <Form
+                    initialData={getInitialPeopleData()}
+                    columns={columns}
+                    onAddData={handleAppPerson}
+                /></>
+            : <h2>No data</h2>
+
     );
 }

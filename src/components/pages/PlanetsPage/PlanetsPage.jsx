@@ -65,19 +65,21 @@ export const PlanetsPage = () => {
     }
 
     return (
-        <>
-            <h1>Planets page</h1>
-            <Table
-                data={planets}
-                columns={columns}
-                tableDescriptor="Planets"
-                deleteItem={deletePlanet}
-            />
-            <Form
-                initialData={getInitialPlanetsData()}
-                columns={columns}
-                onAddData={handlePlanet}
-            />
-        </>
+        (planets.length) ?
+            <>
+                <h1>Planets page</h1>
+                <Table
+                    data={planets}
+                    columns={columns}
+                    tableDescriptor="Planets"
+                    deleteItem={deletePlanet}
+                />
+                <Form
+                    initialData={getInitialPlanetsData()}
+                    columns={columns}
+                    onAddData={handlePlanet}
+                />
+            </>
+            : <h2>No data</h2>
     );
 }

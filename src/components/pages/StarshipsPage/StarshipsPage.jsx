@@ -56,20 +56,22 @@ export const StarshipsPage = () => {
     }
 
     return (
-        <>
-            <h1>Starships page</h1>
-            <Table
-                data={starships}
-                columns={columns}
-                tableDescriptor="Starships"
-                deleteItem={deleteStarship}
-            />
-            <Form
-                initialData={getInitialStarshipsData()}
-                columns={columns}
-                onAddData={handleStarship}
-            />
-        </>
+        (starships.length) ?
+            <>
+                <h1>Starships page</h1>
+                <Table
+                    data={starships}
+                    columns={columns}
+                    tableDescriptor="Starships"
+                    deleteItem={deleteStarship}
+                />
+                <Form
+                    initialData={getInitialStarshipsData()}
+                    columns={columns}
+                    onAddData={handleStarship}
+                />
+            </>
+            : <h2>No data</h2>
     );
 }
 
