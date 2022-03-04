@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
-const element = <h1> Hello Javascript , { 2 + 7 }</h1>
+import { BrowserRouter } from "react-router-dom";
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <BrowserRouter>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </BrowserRouter>,
   document.getElementById('root')
 );

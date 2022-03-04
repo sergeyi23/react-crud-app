@@ -1,48 +1,28 @@
-import React, { useState } from 'react';
-import Table from "./components/common/Table";
-import Form from './components/common/Form'
+import React from 'react';
+import PeoplePage from "./components/pages/PeoplePage";
+import StarshipsPage from "./components/pages/StarshipsPage";
+import PlanetsPage from "./components/pages/PlanetsPage";
+import Navbar from "./components/common/Navbar";
+import { Route, Routes, Navigate } from 'react-router-dom'
 
-// import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
 
 function App() {
-    const [people, setPeople] = useState(data);
-    console.log(people);
-
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
-    }
-
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
-
     return (
         <div className="container">
-            <Table
-                data={people}
-                columns={columns}
-                tableDescriptor="People"
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
-            />
+            <Navbar/>
+            <Routes>
+                <Route path="/" element={<Navigate to={"/people"}/>} />
+                <Route path={"*"} element={<Navigate to={"/not-found"}/>} />
+                <Route path="/not-found" element={(<h2>Not Found</h2>)} />
+                <Route path="/people" element={<PeoplePage/>} />
+                <Route path="/starships" element={<StarshipsPage/>} />
+                <Route path="/planets" element={<PlanetsPage/>} />
+
+            </Routes>
         </div>
-    );
+    )
 }
 
 export default App;

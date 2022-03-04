@@ -3,19 +3,23 @@ import Input from "./Input";
 import Button from "./Button";
 
 const Form = ({columns, initialData, onAddData}) => {
-    const [personData, setPersonData] = useState(initialData);
+    const [data, setData] = useState(initialData);
 
     const handleClick = (event) => {
-        console.log(event)
         event.preventDefault();
-        onAddData(personData);
+        onAddData(data);
+
+        const form = document.querySelectorAll('.form-control')
+        const newData = {...data};
+        form.forEach(input => newData[input.name] = '')
+        setData(newData)
     }
 
     const handleChange = (event) => {
         const { currentTarget : input } = event;
-        const data = {...personData};
-        data[input.name] = input.value;
-        setPersonData(data)
+        const newData = {...data};
+        newData[input.name] = input.value;
+        setData(newData)
     }
 
 
@@ -26,14 +30,14 @@ const Form = ({columns, initialData, onAddData}) => {
                 key={columnName}
                 name={columnName}
                 label={columnName}
-                value={personData[columnName]}
+                value={data[columnName]}
                 type="input"
                 onChange={handleChange}
                 />
             ))}
             <Button
                 label="Save"
-                classes="alert alert-danger"
+                classes="alert alert-success"
                 onClick={handleClick}
             />
         </form>
