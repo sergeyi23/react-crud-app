@@ -1,46 +1,29 @@
-import React, { useState } from 'react';
-import Table from "./components/common/Table";
-import Form from './components/common/Form'
+import React from 'react';
+import { Routes, BrowserRouter as Router, Route } from 'react-router-dom';
+import Navbar from './components/common/Navbar';
+import PeoplePage from './components/pages/PeoplePage';
+import PlanetsPage from './components/pages/PlanetsPage';
+import StarsPage from './components/pages/StarsPage';
+import NotFoundPage from './components/pages/NotFoundPage'
 
 // import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
-
 function App() {
-    const [people, setPeople] = useState(data);
-    console.log(people);
-
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
-    }
-
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
 
     return (
-        <div className="container">
-            <Table
-                data={people}
-                columns={columns}
-                tableDescriptor="People"
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
-            />
+        <div>
+          <Router>
+            <div>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<PeoplePage/>} />
+                <Route path="/planets" element={<PlanetsPage/>} />
+                <Route path="/stars" element={<StarsPage/>} />
+                <Route path="*" element={<NotFoundPage/>} />
+              </Routes>
+            </div>
+          </Router>
         </div>
     );
 }
