@@ -1,48 +1,48 @@
-import React, { useState } from 'react';
-import Table from "./components/common/Table";
-import Form from './components/common/Form'
+import React from 'react';
 
 // import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
+import {Link, Route, BrowserRouter as Router, Routes, Navigate} from "react-router-dom";
+import PeoplePage from "./components/pages/PeoplePage";
+import PlanetsPage from "./components/pages/PlanetsPage";
+import StarshipsPage from "./components/pages/StarshipsPage";
+import NoMatch from "./components/pages/NoMatch";
 
 function App() {
-    const [people, setPeople] = useState(data);
-    console.log(people);
-
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
-    }
-
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
-
     return (
-        <div className="container">
-            <Table
-                data={people}
-                columns={columns}
-                tableDescriptor="People"
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
-            />
-        </div>
-    );
+        <Router>
+            <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
+                <Link className="navbar-brand" to="/">Forte</Link>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/people">People</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/planets">Planets</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/starships">Starships</Link>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <Routes>
+                <Route path="/people" element={<PeoplePage/>}/>}/>
+                <Route path="/planets" element={<PlanetsPage/>}/>}/>
+                <Route path="/starships" element={<StarshipsPage/>}/>}/>
+                <Route path="*" element={<NoMatch/>}/>
+                <Route
+                    path="/"
+                    element={<Navigate to="/people" />}
+                />
+            </Routes>
+        </Router>
+    )
 }
-
 export default App;
