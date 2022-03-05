@@ -3,6 +3,7 @@ import Table from "../../common/Table";
 import {v1} from "uuid";
 import {getStarships} from "../../../services/swApiService";
 import Button from "../../common/Button";
+import {Link} from "react-router-dom";
 
 export const StarshipsPage = () => {
 
@@ -25,9 +26,6 @@ export const StarshipsPage = () => {
         localStorage.setItem('starships', JSON.stringify(starships))
     }, [starships])
 
-    const handleStarship = (starshipData) => {
-        setStarships([...starships, starshipData])
-    }
     const deleteStarship = (id) => {
         setStarships(starships.filter(starship => starship.id !== id))
     }
@@ -36,12 +34,6 @@ export const StarshipsPage = () => {
             return []
         }
         return Object.keys(starships[0]);
-    }
-    const getInitialStarshipsData = () => {
-        return getColumns().reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
     }
 
     return (
@@ -54,16 +46,12 @@ export const StarshipsPage = () => {
                     tableDescriptor="Starships"
                     deleteItem={deleteStarship}
                 />
-                {/*<Form*/}
-                {/*    initialData={getInitialStarshipsData()}*/}
-                {/*    columns={columns}*/}
-                {/*    onAddData={handleStarship}*/}
-                {/*/>*/}
-                <Button
-                    label="Create starship"
-                    classes="btn btn-success btn-lg"
-                    onClick={handleStarship}
-                />
+                <Link to={'/starships/form/new'}>
+                    <Button
+                        label="Create starship"
+                        classes="btn btn-outline-primary"
+                    />
+                </Link>
             </>
             : <h2>No data</h2>
     );

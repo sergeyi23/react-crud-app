@@ -20,21 +20,19 @@ function App() {
                     <Route exact path="/" element={<Navigate to={"/people"}/>}/>
                     <Route path={'*'} element={<Navigate to={"/not-found"}/>}/>
                     <Route path={'/not-found'} element={<h1>Page not found</h1>}/>
-                    <Route path={'/people'} element={<PeoplePage/>}>
-                        <Route path={'/people/form/:id'} element={<PersonFormPage/>}/>
-                    </Route>
-                    <Route path={'/planets'} element={<PlanetsPage/>}>
-                        <Route path={'/planets/form/:id'} element={<PlanetFormPage/>}/>
-                    </Route>
-                    <Route path={'/starships'} element={<StarshipsPage/>}>
-                        <Route path={'/starships/form/:id'}
-                               element={<StarshipFormPage/>}/>
-                    </Route>
+                    <Route path={'/people'} element={<PeoplePage/>}/>
+                    <Route path={'/planets'} element={<PlanetsPage/>}/>
+                    <Route path={'/starships'} element={<StarshipsPage/>}/>
+                    <Route path={'/people/form/:id'}
+                           element={<PersonFormPage/>}/>
+                    <Route path={'/planets/form/:id'}
+                           element={<PlanetFormPage/>}/>
+                    <Route path={'/starships/form/:id'}
+                           element={<StarshipFormPage/>}/>
                 </Routes>
             </div>
         </>
-    )
-        ;
+    );
 }
 
 export default App;

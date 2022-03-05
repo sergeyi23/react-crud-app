@@ -3,6 +3,7 @@ import Table from "../../common/Table";
 import {v1} from "uuid";
 import {getPeople} from "../../../services/swApiService";
 import Button from "../../common/Button";
+import {Link} from "react-router-dom";
 
 export const PeoplePage = () => {
 
@@ -25,9 +26,6 @@ export const PeoplePage = () => {
         localStorage.setItem('people', JSON.stringify(people))
     }, [people])
 
-    const handleAppPerson = (personData) => {
-        setPeople([...people, personData])
-    }
     const deletePerson = (id) => {
         setPeople(people.filter(person => person.id !== id))
     }
@@ -36,12 +34,6 @@ export const PeoplePage = () => {
             return []
         }
         return Object.keys(people[0]);
-    }
-    const getInitialPeopleData = () => {
-        return getColumns().reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
     }
 
     return (
@@ -54,16 +46,12 @@ export const PeoplePage = () => {
                     tableDescriptor="People"
                     deleteItem={deletePerson}
                 />
-                {/*<Form*/}
-                {/*    initialData={getInitialPeopleData()}*/}
-                {/*    columns={columns}*/}
-                {/*    onAddData={handleAppPerson}*/}
-                {/*/>*/}
-                <Button
-                    label="Create person"
-                    classes="btn btn-success btn-lg"
-                    onClick={handleAppPerson}
-                />
+                <Link to={'/people/form/new'}>
+                    <Button
+                        label="Create person"
+                        classes="btn btn-outline-primary"
+                    />
+                </Link>
             </>
             : <h2>No data</h2>
     );

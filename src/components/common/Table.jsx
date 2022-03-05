@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import {Link} from "react-router-dom";
 
 function Table({columns, data, tableDescriptor, deleteItem}) {
 
@@ -23,11 +24,18 @@ function Table({columns, data, tableDescriptor, deleteItem}) {
                 return (
                     <tr key={item.id}>
                         <th scope="row">{++index}</th>
-                        {columns.map(columnTitle => (
-                                <td
-                                    key={item[columnTitle] + columnTitle}>{item[columnTitle]}
-                                </td>
-                            )
+                        {columns.map(columnTitle => {
+                                return (columnTitle === 'name') ?
+                                    <td key={item[columnTitle] + columnTitle}>
+                                        <Link
+                                            to={`/${tableDescriptor.toLowerCase()}/form/${item.id}`}>{item[columnTitle]}
+                                        </Link>
+                                    </td>
+                                    :
+                                    <td key={item[columnTitle] + columnTitle}>
+                                        {item[columnTitle]}
+                                    </td>
+                            }
                         )}
                         <td>
                             <Button

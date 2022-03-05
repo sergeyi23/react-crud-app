@@ -3,6 +3,7 @@ import Table from "../../common/Table";
 import {v1} from "uuid";
 import {getPlanets} from "../../../services/swApiService";
 import Button from "../../common/Button";
+import {Link} from "react-router-dom";
 
 export const PlanetsPage = () => {
 
@@ -25,9 +26,6 @@ export const PlanetsPage = () => {
         localStorage.setItem('planets', JSON.stringify(planets))
     }, [planets])
 
-    const handlePlanet = (planetData) => {
-        setPlanets([...planets, planetData])
-    }
     const deletePlanet = (id) => {
         setPlanets(planets.filter(planet => planet.id !== id))
     }
@@ -36,12 +34,6 @@ export const PlanetsPage = () => {
             return []
         }
         return Object.keys(planets[0]);
-    }
-    const getInitialPlanetsData = () => {
-        return getColumns().reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
     }
 
     return (
@@ -54,16 +46,12 @@ export const PlanetsPage = () => {
                     tableDescriptor="Planets"
                     deleteItem={deletePlanet}
                 />
-                {/*<Form*/}
-                {/*    initialData={getInitialPlanetsData()}*/}
-                {/*    columns={columns}*/}
-                {/*    onAddData={handlePlanet}*/}
-                {/*/>*/}
-                <Button
-                    label="Create planet"
-                    classes="btn btn-success btn-lg"
-                    onClick={handlePlanet}
-                />
+                <Link to={'/planets/form/new'}>
+                    <Button
+                        label="Create planet"
+                        classes="btn btn-outline-primary"
+                    />
+                </Link>
             </>
             : <h2>No data</h2>
     );
