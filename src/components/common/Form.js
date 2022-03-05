@@ -3,21 +3,16 @@ import Input from "./Input";
 import Button from "./Button";
 
 const Form = ({columns, initialData, onAddData}) => {
-    const [personData, setPersonData] = useState(initialData);
+    const [formData, setFormData] = useState(initialData);
 
     const handleClick = (event) => {
-        console.log(event)
         event.preventDefault();
-        onAddData(personData);
+        onAddData(formData);
     }
-
     const handleChange = (event) => {
         const {currentTarget: input} = event;
-        const data = {...personData};
-        data[input.name] = input.value;
-        setPersonData(data)
+        setFormData({...formData, [input.name]: input.value})
     }
-
 
     return (
         <form>
@@ -26,14 +21,14 @@ const Form = ({columns, initialData, onAddData}) => {
                     key={columnName}
                     name={columnName}
                     label={columnName}
-                    value={personData[columnName]}
+                    value={formData[columnName]}
                     type="input"
                     onChange={handleChange}
-                />
-            ))}
+                />))
+            }
             <Button
                 label="Save"
-                classes="alert alert-danger"
+                classes="btn btn-success btn-lg"
                 onClick={handleClick}
             />
         </form>

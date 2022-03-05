@@ -1,83 +1,68 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from "../../common/Table";
-import Form from "../../common/Form";
 import {v1} from "uuid";
-
-// import './App.css';
-
-const planetsInitData = [
-    {
-        planet: 'Mercury',
-        'Mass (1024kg)': '0.330',
-        'Diameter (km)': '4879',
-        'Density (kg/m3)': '5429',
-        'Gravity (m/s2)': '3.7',
-        'Length of Day (hours)': '4222.6',
-        id: v1(),
-    },
-    {
-        planet: 'Venus',
-        'Mass (1024kg)': '0.330',
-        'Diameter (km)': '53879',
-        'Density (kg/m3)': '52429',
-        'Gravity (m/s2)': '4.7',
-        'Length of Day (hours)': '422.6',
-        id: v1(),
-    },
-    {
-        planet: 'Earth',
-        'Mass (1024kg)': '0.330',
-        'Diameter (km)': '4879',
-        'Density (kg/m3)': '5429',
-        'Gravity (m/s2)': '1',
-        'Length of Day (hours)': '24',
-        id: v1(),
-    },
-    {
-        planet: 'Moon',
-        'Mass (1024kg)': '0.330',
-        'Diameter (km)': '4879',
-        'Density (kg/m3)': '5429',
-        'Gravity (m/s2)': '3.7',
-        'Length of Day (hours)': '4',
-        id: v1(),
-    },
-]
-
-const columns = Object.keys(planetsInitData[0]);
+import {getPlanets} from "../../../services/swApiService";
+import Button from "../../common/Button";
 
 export const PlanetsPage = () => {
-    const [planets, setPlanets] = useState(planetsInitData);
+
+    const [planets, setPlanets] = useState(() => {
+        let localPlanetsData = JSON.parse(localStorage.getItem('planets'))
+        return (localPlanetsData) ? localPlanetsData : [];
+    });
+
+    useEffect(() => {
+        const getData = async () => {
+            const data = await getPlanets()
+            setPlanets(data.map(planet => ({...planet, id: v1()})))
+        }
+
+        if (planets.length === 0) {
+            getData();
+        }
+    }, [])
+    useEffect(() => {
+        localStorage.setItem('planets', JSON.stringify(planets))
+    }, [planets])
 
     const handlePlanet = (planetData) => {
-        const data = [...planets, planetData];
-        setPlanets(data)
+        setPlanets([...planets, planetData])
     }
     const deletePlanet = (id) => {
         setPlanets(planets.filter(planet => planet.id !== id))
     }
-
+    const getColumns = () => {
+        if (planets.length === 0) {
+            return []
+        }
+        return Object.keys(planets[0]);
+    }
     const getInitialPlanetsData = () => {
-        return columns.reduce((cols, columnName) => {
+        return getColumns().reduce((cols, columnName) => {
             cols[columnName] = "";
             return cols;
         }, {})
     }
 
     return (
-        (planets.length) ?
-            <>
+        (planets.length)
+            ? <>
                 <h1>Planets page</h1>
                 <Table
                     data={planets}
-                    columns={columns}
+                    columns={getColumns()}
                     tableDescriptor="Planets"
                     deleteItem={deletePlanet}
                 />
-                <Form
-                    initialData={getInitialPlanetsData()}
-                    columns={columns}
-                    onAddData={handlePlanet}
+                {/*<Form*/}
+                {/*    initialData={getInitialPlanetsData()}*/}
+                {/*    columns={columns}*/}
+                {/*    onAddData={handlePlanet}*/}
+                {/*/>*/}
+                <Button
+                    label="Create planet"
+                    classes="btn btn-success btn-lg"
+                    onClick={handlePlanet}
                 />
             </>
             : <h2>No data</h2>

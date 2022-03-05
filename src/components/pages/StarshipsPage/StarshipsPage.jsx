@@ -1,74 +1,68 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from "../../common/Table";
-import Form from "../../common/Form";
 import {v1} from "uuid";
-
-// import './App.css';
-
-const starshipsInitData = [
-    {
-        starship: 'Dragon',
-        height: '50 m / 164 ft',
-        diameter: '9 m / 30 ft',
-        'Propellant capacity': '1200 t / 2.6 Mlb',
-        thrust: '1500 tf / 3.2Mlbf',
-        'payload capacity': '100-150 t orbit dependent',
-        id: v1(),
-    },
-    {
-        starship: 'Apollo',
-        height: '50 m / 164 ft',
-        diameter: '9 m / 30 ft',
-        'Propellant capacity': '1200 t / 2.6 Mlb',
-        thrust: '1500 tf / 3.2Mlbf',
-        'payload capacity': '100-150 t orbit dependent',
-        id: v1(),
-    },
-    {
-        starship: 'Enterprise',
-        height: '50 m / 164 ft',
-        diameter: '9 m / 30 ft',
-        'Propellant capacity': '1200 t / 2.6 Mlb',
-        thrust: '1500 tf / 3.2Mlbf',
-        'payload capacity': '100-150 t orbit dependent',
-        id: v1(),
-    },
-]
-
-const columns = Object.keys(starshipsInitData[0]);
+import {getStarships} from "../../../services/swApiService";
+import Button from "../../common/Button";
 
 export const StarshipsPage = () => {
-    const [starships, setStarships] = useState(starshipsInitData);
+
+    const [starships, setStarships] = useState(() => {
+        let localStarshipsData = JSON.parse(localStorage.getItem('starships'))
+        return (localStarshipsData) ? localStarshipsData : [];
+    });
+
+    useEffect(() => {
+        const getData = async () => {
+            const data = await getStarships()
+            setStarships(data.map(starship => ({...starship, id: v1()})))
+        }
+
+        if (starships.length === 0) {
+            getData();
+        }
+    }, [])
+    useEffect(() => {
+        localStorage.setItem('starships', JSON.stringify(starships))
+    }, [starships])
 
     const handleStarship = (starshipData) => {
-        const data = [...starships, starshipData];
-        setStarships(data)
+        setStarships([...starships, starshipData])
     }
     const deleteStarship = (id) => {
         setStarships(starships.filter(starship => starship.id !== id))
     }
-
+    const getColumns = () => {
+        if (starships.length === 0) {
+            return []
+        }
+        return Object.keys(starships[0]);
+    }
     const getInitialStarshipsData = () => {
-        return columns.reduce((cols, columnName) => {
+        return getColumns().reduce((cols, columnName) => {
             cols[columnName] = "";
             return cols;
         }, {})
     }
 
     return (
-        (starships.length) ?
-            <>
+        (starships.length)
+            ? <>
                 <h1>Starships page</h1>
                 <Table
                     data={starships}
-                    columns={columns}
+                    columns={getColumns()}
                     tableDescriptor="Starships"
                     deleteItem={deleteStarship}
                 />
-                <Form
-                    initialData={getInitialStarshipsData()}
-                    columns={columns}
-                    onAddData={handleStarship}
+                {/*<Form*/}
+                {/*    initialData={getInitialStarshipsData()}*/}
+                {/*    columns={columns}*/}
+                {/*    onAddData={handleStarship}*/}
+                {/*/>*/}
+                <Button
+                    label="Create starship"
+                    classes="btn btn-success btn-lg"
+                    onClick={handleStarship}
                 />
             </>
             : <h2>No data</h2>

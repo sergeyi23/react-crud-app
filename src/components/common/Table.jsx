@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button';
 
 function Table({columns, data, tableDescriptor, deleteItem}) {
 
@@ -29,11 +30,11 @@ function Table({columns, data, tableDescriptor, deleteItem}) {
                             )
                         )}
                         <td>
-                            <button type="button"
-                                    className="btn btn-danger"
-                                    onClick={deleteItemWrapper}
-                            >Delete
-                            </button>
+                            <Button
+                                label={'Delete'}
+                                classes="btn btn-danger"
+                                onClick={deleteItemWrapper}
+                            />
                         </td>
                     </tr>
                 )
