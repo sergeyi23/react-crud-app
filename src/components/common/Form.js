@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Input from "./Input";
 import Button from "./Button";
 
-const Form = ({columns, initialData, saveData}) => {
+const Form = ({columns, initialData, saveData, formError, setFormError}) => {
     const [formData, setFormData] = useState(initialData);
 
     const handleClick = (event) => {
@@ -10,6 +10,7 @@ const Form = ({columns, initialData, saveData}) => {
         saveData(formData);
     }
     const handleChange = (event) => {
+        setFormError('')
         const {currentTarget: input} = event;
         setFormData({...formData, [input.name]: input.value})
     }
@@ -26,6 +27,7 @@ const Form = ({columns, initialData, saveData}) => {
                     onChange={handleChange}
                 />
             ))}
+            {formError && <div className="alert alert-danger">{formError}</div>}
             <Button
                 label="Save"
                 classes="btn btn-success btn-lg"
