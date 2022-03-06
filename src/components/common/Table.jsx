@@ -19,11 +19,11 @@ function Table({columns, data, tableDescriptor, onDeleteData, onUpdateData}) {
                     <tr key={item[Object.keys(item)[0]] + index}>
                         <th scope="row">{++index}</th>
                         {columns.map(columnTitle => (
-                            <td key={columnTitle + item[columnTitle]}>{item[columnTitle]}</td>
+                            <td key={columnTitle + item[columnTitle]} className="align-middle">{item[columnTitle]}</td>
                         ))}
                         <td className="d-flex justify-content-center align-items-center">
-                            <button className="alert alert-danger m-2" onClick={(e) => onDeleteData(index - 1)}>Delete</button>
                             <button className="alert alert-heading m-2" onClick={(e) => onUpdateData(index - 1)}>Edit</button>
+                            <button className="alert alert-danger m-2" onClick={(e) => onDeleteData(index - 1)}>Delete</button>
                         </td>
                     </tr>
                 ))}

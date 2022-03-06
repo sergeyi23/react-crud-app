@@ -52,17 +52,17 @@ function App() {
         <Router>
             <Navbar/>
             <Routes>
-                <Route path="/people" element={<Page service="people" data={personData} stateData={statePeopleData} setData={setPeopleData}/>}/>
+                <Route path="/people" element={<Page title="People" service="people" data={personData} stateData={statePeopleData} setData={setPeopleData}/>}/>
                 <Route path="/people/:operation" element={<TableForm service="people" stateData={statePeopleData} setData={setPeopleData}/>}/>
                 <Route path="/people/:operation/:id" element={<TableForm service="people" stateData={statePeopleData} setData={setPeopleData}/>}/>
 
-                <Route path="/planets" element={<Page service="planets" data={planetsData} stateData={statePlanetsData} setData={setPlanetsData}/>}/>
+                <Route path="/planets" element={<Page title="Planets" service="planets" data={planetsData} stateData={statePlanetsData} setData={setPlanetsData}/>}/>
                 <Route path="/planets/:operation" element={<TableForm service="planets" stateData={statePlanetsData} setData={setPlanetsData}/>}/>
                 <Route path="/planets/:operation/:id" element={<TableForm service="planets" stateData={statePlanetsData} setData={setPlanetsData}/>}/>
 
-                <Route path="/starships" element={<Page service="starships" data={starshipsData} stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
+                <Route path="/starships" element={<Page title="Starships" service="starships" data={starshipsData} stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
                 <Route path="/starships/:operation" element={<TableForm service="starships" stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
-                <Route path="/starships/:operation/:id" element={<TableForm service="starships"stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
+                <Route path="/starships/:operation/:id" element={<TableForm service="starships" stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
 
                 <Route path="*" element={<NoMatch/>}/>
                 <Route
