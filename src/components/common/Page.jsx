@@ -1,52 +1,42 @@
 import React from "react";
 import Table from "./Table";
-import Form from "./Form";
+import {useNavigate} from "react-router-dom";
 
+function Page({data, title, stateData, setData, service}) {
 
-
-function Page({data, title, stateData, setData}) {
-    if (data) {
-        const columns = Object.keys(data[0]);
-        /*const [stateData, setData] = useState(data);
-        console.log(stateData)*/
-
-        const handleAdd = (Data) => {
-            const data = [...stateData, Data];
-            setData(data);
+    const navigate = useNavigate()
+    const getColumns = () => {
+        if (!stateData.length) {
+            return []
         }
+        return Object.keys(stateData[0])
+    }
 
-        const handleDelete = (index) => {
-            let temp = [...stateData]
-            temp.splice(index, 1)
-            const data = [...temp];
-            setData(data);
-        }
+    const handleDelete = (index) => {
+        let temp = [...stateData]
+        temp.splice(index, 1)
+        const data = [...temp];
+        setData(data);
+    }
 
-        const getInitialData = () => {
-            return columns.reduce((cols, columnName) => {
-                cols[columnName] = "";
-                return cols;
-            }, {})
-        }
+    const handleUpdate = (index) => {
+        navigate(`/${service}/update/${index}`)
+    }
 
-        return (
-            <div className="container">
+    return (
+        <div className="container">
+            {stateData.length > 0 &&
                 <Table
                     data={stateData}
-                    columns={columns}
+                    columns={getColumns()}
                     tableDescriptor={title}
                     onDeleteData={handleDelete}
+                    onUpdateData={handleUpdate}
                 />
-                <Form
-                    initialData={getInitialData()}
-                    columns={columns}
-                    onAddData={handleAdd}
-                />
-            </div>
-        );
-    } else {
-        return (<h1>Empty data!</h1>)
-    }
+            }
+            {!stateData.length && <h1>Empty data!</h1>}
+        </div>
+    );
 }
 
 export default Page;
