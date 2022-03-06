@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 const Navbar = () => {
 return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light bg-white">
         <a className="navbar-brand" href="/">React App</a>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">

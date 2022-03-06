@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import Input from "./Input";
 import Button from "./Button";
 
-const Form = ({columns, initialData, onAddData}) => {
+const Form = ({columns, initialData, onAddData, schema}) => {
     const [data, setData] = useState(initialData);
+
+    let isError = false;
 
     const handleClick = (event) => {
         event.preventDefault();
-        onAddData(data);
 
+        const check = schema.validate(data).error
+        if (check !== undefined) {
+            isError = true;
+            return;
+        }
+
+        onAddData(data);
         const form = document.querySelectorAll('.form-control')
         const newData = {...data};
         form.forEach(input => newData[input.name] = '')
@@ -37,7 +45,7 @@ const Form = ({columns, initialData, onAddData}) => {
             ))}
             <Button
                 label="Save"
-                classes="alert alert-success"
+                classes={isError ? "btn btn-danger mt-3 mb-3" : "btn btn-outline-success mt-3 mb-3"}
                 onClick={handleClick}
             />
         </form>

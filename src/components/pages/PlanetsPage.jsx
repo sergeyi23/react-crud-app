@@ -1,19 +1,51 @@
-import React from 'react';
-import Page from "./../common/Page";
+import React, {useEffect} from 'react';
+import {getPlanets} from "../../services/swapiService";
+import Page from "../common/Page";
 
-const data = [
-    {name: "Earth", weight: "5.97", diame: "12742", satellites: "1", id: "1"},
-    {name: "Jupiter", weight: "1898", diame: "139820", satellites: "80", id: "2"},
-    {name: "Mars", weight: "0.641", diame: "6779", satellites: "2", id: "3"},
-]
+const Joi = require('joi');
 
-function PlanetsPage() {
+const schema = Joi.object({
+    name: Joi.string().min(2).required(),
+    rotation_period: Joi.number().min(0),
+    orbital_period: Joi.number().min(0),
+    diameter: Joi.number().min(0),
+    climate: Joi.string(),
+    id: Joi.number().integer().min(1)
+});
+
+function PlanetsPage({data, cols, setter, title}) {
+
+    useEffect(() => {
+        const getData = async () => {
+            const data = await getPlanets()
+
+            let i = 0;
+            let newData = data.map(elem => elem = {...elem, id: ++i});
+
+            localStorage.setItem("planets", JSON.stringify(newData))
+            setter(newData)
+        }
+
+        if (localStorage.getItem("planets") === null)
+        {
+            console.log('Planets data was loaded from SWAPI');
+            getData();
+        }
+        else {
+            console.log('Planets data was loaded from Local Storage')
+            setter(JSON.parse(localStorage.getItem("planets")));
+        }
+    }, [])
+
     return (
         <Page
             data={data}
-            title="Planets"
+            cols={cols}
+            setter={setter}
+            title={title}
+            schema={schema}
         />
-    )
+    );
 }
 
 export default PlanetsPage

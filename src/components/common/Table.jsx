@@ -6,25 +6,25 @@ function Table({columns, tableData, tableDescriptor, onRemoveData}) {
     const handleClick = (event) => {
         event.preventDefault();
         let id = event.currentTarget['value'];
-        let row = tableData.find(item => item.id === id)
-        onRemoveData(row)
+        onRemoveData(id)
     }
 
     return (
-        <table className="table table-light">
+        <table className="table ">
             <thead>
             <tr>
                 <th scope="col">{tableDescriptor}</th>
                 {columns.map(columnTitle => (
                     <th key={columnTitle} scope="col">{columnTitle}</th>
                 ))}
-                <th scope="col"/>
             </tr>
             </thead>
             <tbody>
             {tableData.map((item, index) => (
                 <tr key={item.id}>
-                    <th scope="row">{++index}</th>
+                        <th scope="row">
+                            {++index}
+                        </th>
                     {columns.map(columnTitle => (
                         <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
                     ))}
@@ -32,9 +32,16 @@ function Table({columns, tableData, tableDescriptor, onRemoveData}) {
                         <Button
                             value={item.id}
                             label="Delete"
-                            classes="btn btn-light"
-                            onClick={handleClick}>
-                        </Button>
+                            classes="btn btn-outline-danger"
+                            onClick={handleClick}
+                        />
+                    </td>
+                    <td>
+                        <Button
+                            value={item.id}
+                            label="Edit"
+                            classes="btn btn-outline-success"
+                        />
                     </td>
                 </tr>
             ))}

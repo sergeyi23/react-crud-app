@@ -1,22 +1,23 @@
-import React, {useState} from 'react';
-import Table from "./Table";
-import Form from './Form'
+import React from 'react';
+import Table from "../common/Table";
+import Button from "../common/Button";
+import Form from "../common/Form";
 
-import 'bootstrap/dist/css/bootstrap.css';
-
-
-function Page({data, title}) {
-    const columns = Object.keys(data[0]);
-
-    const [tableData, setTableData] = useState(data);
+function Page({data, cols, setter, title, schema}) {
+    const columns = data === [] ? Object.keys(data[0]) : cols;
 
     const handleAppData = (newData) => {
-        const data = [...tableData, newData];
-        setTableData(data)
+        localStorage.removeItem(title)
+        const d = [...data, newData];
+        localStorage.setItem(title, JSON.stringify(d))
+        setter(d)
     }
 
-    const handleRemoveData = (row) => {
-        setTableData(tableData.filter(item => item !== row))
+    const handleRemoveData = (id) => {
+        localStorage.removeItem(title)
+        let newData = data.filter(item => item.id != id)
+        localStorage.setItem(title, JSON.stringify(newData))
+        setter(newData)
     }
 
     const getInitialData = () => {
@@ -28,21 +29,22 @@ function Page({data, title}) {
 
     return (
         <div className="container">
-            {tableData.length > 0 ?
-            <Table
-                tableData={tableData}
-                columns={columns}
-                tableDescriptor={title}
-                onRemoveData={handleRemoveData}
-            />
+            {data.length > 0 ?
+                <Table
+                    tableData={data}
+                    columns={columns}
+                    tableDescriptor={title[0].toUpperCase() + title.slice(1)}
+                    onRemoveData={handleRemoveData}
+                />
                 : <h4>No data</h4>}
             <Form
                 initialData={getInitialData()}
                 columns={columns}
                 onAddData={handleAppData}
+                schema={schema}
             />
         </div>
     );
 }
 
-export default Page;
+export default Page
