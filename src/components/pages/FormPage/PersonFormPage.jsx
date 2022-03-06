@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import Form from "../../common/Form";
-import {v1} from "uuid";
 import {useNavigate} from 'react-router-dom';
 import Joi from "joi";
+import {useDispatch, useSelector} from "react-redux";
+import {addPerson, changePerson} from "../../../store/people-reducer";
 
 const peopleColumns = ["name", "height", "mass", "gender", "birth_year"];
 const schema = Joi.object({
@@ -17,10 +18,9 @@ const schema = Joi.object({
 
 export const PersonFormPage = () => {
 
-    const [people, setPeople] = useState(() => {
-        let localPeopleData = JSON.parse(localStorage.getItem('people'))
-        return (localPeopleData) ? localPeopleData : [];
-    });
+    const people = useSelector(state => state.people)
+    const dispatch = useDispatch()
+
     const [formError, setFormError] = useState('');
 
     const params = useParams()
@@ -34,26 +34,25 @@ export const PersonFormPage = () => {
             return cols;
         }, {})
     }
-    const addPerson = (personData) => {
+    const addPersonWrapper = (personData) => {
         const {error} = schema.validate(personData)
         if (error) {
             setFormError(error.details[0].message)
             return;
         }
-        setPeople([...people, {...personData, id: v1()}])
+        dispatch(addPerson(personData))
         setTimeout(() => {
             navigate('/people')
         })
     }
-    const changePerson = (personData) => {
+    const changePersonWrapper = (personData) => {
         const {error} = schema.validate(personData)
         if (error) {
+            console.log(error.details[0].message)
             setFormError(error.details[0].message)
             return;
         }
-        setPeople(people.map(person => {
-            return (person.id === personData.id) ? personData : person
-        }))
+        dispatch(changePerson(personData));
         setTimeout(() => {
             navigate('/people')
         })
@@ -67,15 +66,15 @@ export const PersonFormPage = () => {
         <Form
             columns={peopleColumns}
             initialData={getInitialPeopleData()}
-            saveData={addPerson}
+            saveData={addPersonWrapper}
             formError={formError}
             setFormError={setFormError}
         />
         : <Form
             columns={peopleColumns}
             initialData={people.find(person => person.id === userId)}
-            saveData={changePerson}
-            formError={formError}
+            saveData={changePersonWrapper}
+            error={formError}
             setFormError={setFormError}
         />
 

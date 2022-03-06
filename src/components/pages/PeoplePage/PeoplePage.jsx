@@ -1,33 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Table from "../../common/Table";
-import {v1} from "uuid";
-import {getPeople} from "../../../services/swApiService";
 import Button from "../../common/Button";
 import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchTasks, removePerson} from "../../../store/people-reducer";
 
 export const PeoplePage = () => {
 
-    const [people, setPeople] = useState(() => {
-        let localPeopleData = JSON.parse(localStorage.getItem('people'))
-        return (localPeopleData) ? localPeopleData : [];
-    });
+    const people = useSelector(state => state.people)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        const getData = async () => {
-            const data = await getPeople()
-            setPeople(data.map(person => ({...person, id: v1()})))
-        }
-
-        if (people.length === 0) {
-            getData();
-        }
+        dispatch(fetchTasks());
     }, [])
     useEffect(() => {
         localStorage.setItem('people', JSON.stringify(people))
     }, [people])
 
     const deletePerson = (id) => {
-        setPeople(people.filter(person => person.id !== id))
+        dispatch(removePerson(id))
     }
     const getColumns = () => {
         if (people.length === 0) {
