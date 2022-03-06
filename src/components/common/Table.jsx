@@ -1,7 +1,20 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
-function Table({ columns, data, tableDescriptor, onDeleteData }) {
+function Table({
+  tableName,
+  columns,
+  data,
+  tableDescriptor,
+  onDeleteData,
+  setPerson,
+}) {
+  const handleClick = (id) => {
+    const person = data.find((p) => p.id === id);
+    setPerson(person);
+  };
+
   return (
     <table className="table table-dark col-11 col-md-8 col-xl-6 mx-auto">
       <thead>
@@ -18,9 +31,25 @@ function Table({ columns, data, tableDescriptor, onDeleteData }) {
         {data.map((item, index) => (
           <tr key={Date.now() * Math.random()}>
             <th scope="row">{++index}</th>
-            {columns.map((columnTitle) => (
-              <td key={item[columnTitle] + columnTitle}>{item[columnTitle]}</td>
-            ))}
+            {columns.map((columnTitle, i) => {
+              return i === 0 ? (
+                <td
+                  key={item[columnTitle] + columnTitle}
+                  onClick={() => handleClick(item["id"])}
+                >
+                  <NavLink
+                    to={`/${tableName}/${item["id"]}/edit`}
+                    className="text-white"
+                  >
+                    {item[columnTitle]}
+                  </NavLink>
+                </td>
+              ) : (
+                <td key={item[columnTitle] + columnTitle}>
+                  {item[columnTitle]}
+                </td>
+              );
+            })}
             <td>
               <Button
                 type="button"

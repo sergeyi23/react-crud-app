@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Input from "./Input";
 
-const Form = ({
-  initialData,
+const EditForm = ({
+  personData,
+  setPersonData,
   columns,
-  onAddData,
-  newData,
-  createNewData,
+  onEditForm,
   buttonTitle,
 }) => {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -17,16 +16,16 @@ const Form = ({
 
   const handleClick = (event) => {
     event.preventDefault();
-    onAddData(newData);
-    createNewData(initialData());
+    onEditForm(personData);
     setIsSuccess(true);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.currentTarget;
-    const data = { ...newData };
-    data[name] = value;
-    createNewData(data);
+    setPersonData({
+      ...personData,
+      [name]: value,
+    });
   };
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const Form = ({
     <form className="col-11 col-md-8 col-xl-6 mx-auto">
       {isSuccess && (
         <h1 className="col-10 mx-auto py-2 text-center text-success">
-          SUCCESSFULLY ADDED
+          SUCCESSFULLY UPDATED
         </h1>
       )}
       {columns.map((columnName) => (
@@ -53,14 +52,16 @@ const Form = ({
           key={columnName}
           name={columnName}
           label={columnName}
-          value={newData[columnName]}
+          value={personData[columnName]}
           type="input"
           onChange={handleChange}
         />
       ))}
       <Button
         type="button"
-        disabled={[...Object.values(newData)].some((key) => key.trim() === "")}
+        disabled={[...Object.values(personData)].some(
+          (key) => key.trim() === ""
+        )}
         className="btn btn-primary col-5 col-md-2 fs-4 px-2 mx-auto"
         onClick={handleClick}
       >
@@ -70,4 +71,4 @@ const Form = ({
   );
 };
 
-export default Form;
+export default EditForm;
