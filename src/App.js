@@ -1,47 +1,25 @@
-import React, { useState } from 'react';
-import Table from "./components/common/Table";
-import Form from './components/common/Form'
-
-// import './App.css';
+import React from 'react';
+import {Routes, Route} from "react-router-dom";
+import Navbar from './components/common/Navbar';
+import PeoplePage from './components/Pages/PeoplePage';
+import PlanetsPage from './components/Pages/PlanetsPage';
+import StarshipsPage from './components/Pages/StarshipsPage';
+import NotFoundPage from './components/Pages/NotFoundPage';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
-
-function App() {
-    const [people, setPeople] = useState(data);
-    console.log(people);
-
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
-    }
-
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
+function App() {    
 
     return (
-        <div className="container">
-            <Table
-                data={people}
-                columns={columns}
-                tableDescriptor="People"
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
-            />
-        </div>
+        <>
+            <Navbar />
+                <Routes>
+                    <Route exact from="/" to="/people" />
+                    <Route path="/people" element={<PeoplePage/>} />
+                    <Route path="/planets" element={<PlanetsPage/>} />
+                    <Route path="/starships" element={<StarshipsPage/>} />
+                    <Route path="*" element={<NotFoundPage/>} />
+                </Routes>
+        </>
     );
 }
 

@@ -4,11 +4,20 @@ import Button from "./Button";
 
 const Form = ({columns, initialData, onAddData}) => {
     const [personData, setPersonData] = useState(initialData);
+    const [errorFields, setErrorFields] = useState([]);
+    const errorMessage = 'Obligatory field';
 
     const handleClick = (event) => {
-        console.log(event)
         event.preventDefault();
-        onAddData(personData);
+        const invalid = (columnName) => personData[columnName].length === 0;
+        const errorFields = columns.filter(invalid);
+        if(errorFields.length) {
+            setErrorFields(errorFields);
+        } else {
+            onAddData(personData);
+            setPersonData(initialData);
+            setErrorFields([]);
+        }
     }
 
     const handleChange = (event) => {
@@ -27,13 +36,14 @@ const Form = ({columns, initialData, onAddData}) => {
                 name={columnName}
                 label={columnName}
                 value={personData[columnName]}
+                error={errorFields.includes(columnName) ? errorMessage : ''}
                 type="input"
                 onChange={handleChange}
                 />
             ))}
             <Button
                 label="Save"
-                classes="alert alert-danger"
+                classes="btn btn-danger"
                 onClick={handleClick}
             />
         </form>

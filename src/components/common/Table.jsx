@@ -1,6 +1,12 @@
 import React from 'react';
+import Button from './Button';
 
-function Table({columns, data, tableDescriptor}) {
+function Table({columns, data, tableDescriptor, onDeleteData}) {
+
+    const handleClick = (id) => {
+        onDeleteData(id);
+    }
+
     return (
         <table className="table table-dark">
             <thead>
@@ -13,13 +19,20 @@ function Table({columns, data, tableDescriptor}) {
             </thead>
             <tbody>
             {data.map((item, index) => (
-                <tr key={item.id}>
-                    <th scope="row">{++index}</th>
-                    {columns.map(columnTitle => (
-                        <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
-                    ))}
-                </tr>
-            ))}
+                    <tr key={item.id}>
+                        <th scope="row">{++index}</th>
+                        {columns.map(columnTitle => (
+                            <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
+                        ))}
+                        <td>
+                            <Button
+                            label="Delete"
+                            classes="btn btn-danger"
+                            onClick={() => handleClick(item.id)}
+                            />
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>
     )
