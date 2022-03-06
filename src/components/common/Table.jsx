@@ -1,6 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Button from "./Button";
+function Table({data, category,  columns, tableDescriptor, onDeleteData}) {
+    if(data.length == 0){
+        return <h1>This page contains no information.</h1>
+    }
 
-function Table({columns, data, tableDescriptor}) {
     return (
         <table className="table table-dark">
             <thead>
@@ -9,6 +14,7 @@ function Table({columns, data, tableDescriptor}) {
                 {columns.map(columnTitle => (
                     <th key={columnTitle} scope="col">{columnTitle}</th>
                 ))}
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -16,8 +22,19 @@ function Table({columns, data, tableDescriptor}) {
                 <tr key={item.id}>
                     <th scope="row">{++index}</th>
                     {columns.map(columnTitle => (
-                        <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
+                        <td key={item[columnTitle]+columnTitle}>
+                            <Link to={`/${category}/${item.id}`}>
+                                {item[columnTitle]}
+                            </Link>
+                        </td>
                     ))}
+                    <td>
+                        <Button
+                            label="Delete"
+                            classes="btn btn-danger"
+                            onClick={() => onDeleteData(item.id)}
+                        />
+                    </td>
                 </tr>
             ))}
             </tbody>
