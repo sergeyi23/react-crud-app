@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import Joi from "joi"
+import Joi from "joi";
+import { useSelector, useDispatch } from 'react-redux';
+import {addPerson, updatePerson} from '../../../store/actions/people';
 import Form from '../../common/Form';
 
 const columns = ['name','height','mass','gender','birth_year','id']
@@ -14,7 +16,9 @@ const schema = Joi.object().keys({
   });
 
 const DataForm = () => {
-    const [people, setPeople] = useState(JSON.parse(localStorage.getItem('people')));
+    const dispatch = useDispatch();
+    const people = useSelector(state => state.people);
+    // const [people, setPeople] = useState(JSON.parse(localStorage.getItem('people')));
     const [errors, setErrors] = useState('');
 
     const navigation = useNavigate();
@@ -25,32 +29,26 @@ const DataForm = () => {
     }, [people])
 
     const handleAppPerson = (personData) => {
-        const {error} = schema.validate(personData)
+        const {error} = schema.validate(personData);
         if (error) {
-            setErrors(error.details[0].message)
+            setErrors(error.details[0].message);
             return;
         }
-        const data = [...people, personData];
-        setPeople(data);
+        dispatch(addPerson(personData));
         setTimeout(() => {
-            navigation('/people')
+            navigation('/people');
         })
     }
   
     const handleUdpatePerson = (personData) => {
-        const {error} = schema.validate(personData)
+        const {error} = schema.validate(personData);
         if (error) {
-            setErrors(error.details[0].message)
+            setErrors(error.details[0].message);
             return;
         }
-        setPeople(people.map((person)=>{
-            if(person.id === personData.id){
-                return personData;
-            }
-            return person;
-        }))
+        dispatch(updatePerson(personData));
         setTimeout(() => {
-            navigation('/people')
+            navigation('/people');
         })
     }
 

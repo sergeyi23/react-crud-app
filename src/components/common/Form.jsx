@@ -20,7 +20,7 @@ const Form = ({columns, initialData, onAddData, errors, setErrors}) => {
 
     return (
         <form>
-            {columns.slice(0, -1).map( columnName => (
+            {columns.map( columnName => (
                 <Input
                 key={columnName}
                 name={columnName}

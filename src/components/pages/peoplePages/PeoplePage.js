@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {setPeople, deletePerson} from '../../../store/actions/people'
 import Table from "../../common/Table";
 import Button from "../../common/Button";
 import {getPeople} from "../../../services/swApiService";
 const data = []
 
 const PeoplePage = () => {
-    const [people, setPeople] = useState(data);
-  
+  const dispatch = useDispatch();
+  const people = useSelector(state => state.people);
+
     useEffect( () => {
       const getData = async () => {
           if(!localStorage.getItem('people')){
             const data = await getPeople();
             localStorage.setItem('people',JSON.stringify(data));
-            //console.log(JSON.parse(localStorage.getItem('people')));
           }
-          setPeople(JSON.parse(localStorage.getItem('people')));
+          dispatch(setPeople(JSON.parse(localStorage.getItem('people'))));
       }
       getData()
     }, [])
@@ -23,7 +25,7 @@ const PeoplePage = () => {
     const handleDelateItem = (id) => {
       const filteredData = people.filter(person => person.id !== id);
       localStorage.setItem('people',JSON.stringify(filteredData));
-      setPeople(filteredData);
+      dispatch(deletePerson(id));
     }
 
     const getColumnNames = () => {
@@ -45,6 +47,7 @@ const PeoplePage = () => {
           </Link>
           <Table
             data={people}
+            category={'people'}
             columns={getColumnNames()}
             tableDescriptor="People"
             onDeleteData={handleDelateItem}

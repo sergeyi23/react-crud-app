@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import { Provider} from 'react-redux'
+import { createStore} from 'redux'
 
-const element = <h1> Hello Javascript , { 2 + 7 }</h1>
+import rootReducer from './store/reducers'
+
+const store = createStore(rootReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+        <App />
+    </Provider>,
   </React.StrictMode>,
   document.getElementById('root')
 );

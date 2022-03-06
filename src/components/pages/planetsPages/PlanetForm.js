@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import Joi from "joi"
+import Joi from "joi";
+import { useSelector, useDispatch } from 'react-redux';
+import { addPlanet, updatePlanet} from '../../../store/actions/planets';
 import Form from '../../common/Form';
 
 const columns = ['name', 'climate', 'population', 'diameter', 'gravity', 'id']
@@ -14,7 +16,8 @@ const schema = Joi.object().keys({
   });
 
 const DataForm = () => {
-    const [planets, setPlanets] = useState(JSON.parse(localStorage.getItem('planets')));
+    const dispatch = useDispatch();
+    const planets = useSelector(state => state.planets);
     const [errors, setErrors] = useState('');
 
     const navigation = useNavigate()
@@ -30,8 +33,7 @@ const DataForm = () => {
             setErrors(error.details[0].message)
             return;
         }
-        const data = [...planets, planetData];
-        setPlanets(data);
+        dispatch(addPlanet(planetData));
         setTimeout(() => {
             navigation('/planets')
         })
@@ -43,18 +45,13 @@ const DataForm = () => {
             setErrors(error.details[0].message)
             return;
         }
-        setPlanets(planets.map((planet)=>{
-            if(planet.id === planetData.id){
-                return planetData;
-            }
-            return planet;
-        }))
+        dispatch(updatePlanet(planetData));
         setTimeout(() => {
             navigation('/planets')
         })
     }
 
-    const getInitialPeopleData = () => {
+    const getInitialPlanetData = () => {
         return columns.reduce((cols, columnName) => {
             cols[columnName] = "";
             return cols;
@@ -68,7 +65,7 @@ const DataForm = () => {
                 <div className="container">  
                 <h1>Create new planet</h1>
                 <Form
-                    initialData={getInitialPeopleData()}
+                    initialData={getInitialPlanetData()}
                     columns={columns}
                     onAddData={handleAppPlanet}
                     errors = {errors}

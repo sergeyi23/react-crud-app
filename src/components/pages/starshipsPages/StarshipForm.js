@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import Joi from "joi"
+import Joi from "joi";
+import { useSelector, useDispatch } from 'react-redux';
+import { addStarship, updateStarship} from '../../../store/actions/starships';
 import Form from '../../common/Form';
 
 const columns = ['name', 'starship_class', 'passengers', 'length', 'consumables', 'id']
@@ -14,7 +16,8 @@ const schema = Joi.object().keys({
   });
 
 const DataForm = () => {
-    const [starships, setStarship] = useState(JSON.parse(localStorage.getItem('starships')));
+    const dispatch = useDispatch();
+    const starships = useSelector(state => state.starships);
     const [errors, setErrors] = useState('');
 
     const navigation = useNavigate()
@@ -31,7 +34,7 @@ const DataForm = () => {
             return;
         }
         const data = [...starships, starshipData];
-        setStarship(data)
+        dispatch(addStarship(starshipData));
         setTimeout(() => {
             navigation('/starships')
         })
@@ -43,12 +46,7 @@ const DataForm = () => {
             setErrors(error.details[0].message)
             return;
         }
-        setStarship(starships.map((starship)=>{
-            if(starship.id === starshipData.id){
-                return starshipData;
-            }
-            return starship;
-        }))
+        dispatch(updateStarship(starshipData));
         setTimeout(() => {
             navigation('/starships')
         })
