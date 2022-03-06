@@ -17,7 +17,7 @@ function Navbar(){
                         <Link className="nav-link" to="/planets">Planets</Link>  
                     </li>
                     <li className="nav-item" >
-                        <Link className="nav-link" to="/stars">Stars</Link>  
+                        <Link className="nav-link" to="/starships">Starships</Link>  
                     </li>
                 </ul>
             </div>             

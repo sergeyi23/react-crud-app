@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from "./Button";
-function Table({columns, data, tableDescriptor, onDeleteData}) {
-
+function Table({data, columns, tableDescriptor, onDeleteData}) {
     if(data.length == 0){
         return <h1>This page contains no information.</h1>
     }
@@ -14,7 +14,7 @@ function Table({columns, data, tableDescriptor, onDeleteData}) {
                 {columns.map(columnTitle => (
                     <th key={columnTitle} scope="col">{columnTitle}</th>
                 ))}
-                <th>Delete</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -22,7 +22,11 @@ function Table({columns, data, tableDescriptor, onDeleteData}) {
                 <tr key={item.id}>
                     <th scope="row">{++index}</th>
                     {columns.map(columnTitle => (
-                        <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
+                        <td key={item[columnTitle]+columnTitle}>
+                            <Link to={`/people/${item.id}`}>
+                                {item[columnTitle]}
+                            </Link>
+                        </td>
                     ))}
                     <td>
                         <Button
