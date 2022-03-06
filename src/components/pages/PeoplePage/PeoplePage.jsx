@@ -3,7 +3,11 @@ import Table from "../../common/Table";
 import Button from "../../common/Button";
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchTasks, removePerson} from "../../../store/people-reducer";
+import {
+    changePersonBeloved,
+    fetchTasks,
+    removePerson
+} from "../../../store/people-reducer";
 
 export const PeoplePage = () => {
 
@@ -19,6 +23,9 @@ export const PeoplePage = () => {
 
     const deletePerson = (id) => {
         dispatch(removePerson(id))
+    }
+    const changePersonBelovedStatus = (beloved, id) => {
+        dispatch(changePersonBeloved(beloved, id))
     }
     const getColumns = () => {
         if (people.length === 0) {
@@ -36,6 +43,8 @@ export const PeoplePage = () => {
                     columns={getColumns()}
                     tableDescriptor="People"
                     deleteItem={deletePerson}
+                    changeItemStatus={changePersonBelovedStatus}
+
                 />
                 <Link to={'/people/form/new'}>
                     <Button
