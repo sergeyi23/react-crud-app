@@ -25,7 +25,7 @@ function Page({data, title, stateData, setData, service}) {
 
     return (
         <div className="container">
-            <h1 className="mt-2">{title} of Star Wars Universe</h1>
+            <h1 className="mt-2">{title} from Star Wars Universe</h1>
             {stateData.length > 0 &&
                 <Table
                     data={stateData}
