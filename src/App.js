@@ -10,6 +10,11 @@ import Page from "./components/common/Page";
 import {getPeople} from "./services/peopleService";
 import {getPlanets} from "./services/planetsService";
 import {getStarships} from "./services/starshipsService";
+import {useDispatch} from "react-redux";
+import {setPeople} from "./store/actions/people";
+import {setPlanets} from "./store/actions/planets";
+import {setStarships} from "./store/actions/starships";
+
 
 
 const personData = []
@@ -20,14 +25,17 @@ const starshipsData = []
 
 
 function App() {
-    const [statePeopleData, setPeopleData] = useState(personData)
-    const [statePlanetsData, setPlanetsData] = useState(planetsData)
-    const [stateStarshipsData, setStarshipsData] = useState(starshipsData)
+    const dispatch = useDispatch()
+
+    /*const [statePeopleData, setPeopleData] = useState(personData)*/
+    /*const [statePlanetsData, setPlanetsData] = useState(planetsData)
+    const [stateStarshipsData, setStarshipsData] = useState(starshipsData)*/
 
     useEffect(() => {
         const getData = async () => {
             const data = await getPeople()
-            setPeopleData(data)
+            /*setPeopleData(data)*/
+            dispatch(setPeople(data))
         }
         getData()
     }, [])
@@ -35,7 +43,7 @@ function App() {
     useEffect(() => {
         const getData = async () => {
             const data = await getPlanets()
-            setPlanetsData(data)
+            dispatch(setPlanets(data))
         }
         getData()
     }, [])
@@ -43,7 +51,7 @@ function App() {
     useEffect(() => {
         const getData = async () => {
             const data = await getStarships()
-            setStarshipsData(data)
+            dispatch(setStarships(data))
         }
         getData()
     }, [])
@@ -52,17 +60,17 @@ function App() {
         <Router>
             <Navbar/>
             <Routes>
-                <Route path="/people" element={<Page title="People" service="people" data={personData} stateData={statePeopleData} setData={setPeopleData}/>}/>
-                <Route path="/people/:operation" element={<TableForm service="people" stateData={statePeopleData} setData={setPeopleData}/>}/>
-                <Route path="/people/:operation/:id" element={<TableForm service="people" stateData={statePeopleData} setData={setPeopleData}/>}/>
+                <Route path="/people" element={<Page title="People" service="people"/>}/>
+                <Route path="/people/:operation" element={<TableForm service="people"/>}/>
+                <Route path="/people/:operation/:id" element={<TableForm service="people"/>}/>
 
-                <Route path="/planets" element={<Page title="Planets" service="planets" data={planetsData} stateData={statePlanetsData} setData={setPlanetsData}/>}/>
-                <Route path="/planets/:operation" element={<TableForm service="planets" stateData={statePlanetsData} setData={setPlanetsData}/>}/>
-                <Route path="/planets/:operation/:id" element={<TableForm service="planets" stateData={statePlanetsData} setData={setPlanetsData}/>}/>
+                <Route path="/planets" element={<Page title="Planets" service="planets"/>}/>
+                <Route path="/planets/:operation" element={<TableForm service="planets"/>}/>
+                <Route path="/planets/:operation/:id" element={<TableForm service="planets"/>}/>
 
-                <Route path="/starships" element={<Page title="Starships" service="starships" data={starshipsData} stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
-                <Route path="/starships/:operation" element={<TableForm service="starships" stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
-                <Route path="/starships/:operation/:id" element={<TableForm service="starships" stateData={stateStarshipsData} setData={setStarshipsData}/>}/>
+                <Route path="/starships" element={<Page title="Starships" service="starships"/>}/>
+                <Route path="/starships/:operation" element={<TableForm service="starships"/>}/>
+                <Route path="/starships/:operation/:id" element={<TableForm service="starships"/>}/>
 
                 <Route path="*" element={<NoMatch/>}/>
                 <Route

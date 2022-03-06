@@ -7,16 +7,6 @@ const Form = ({initialData, onAddData}) => {
     const columns = Object.keys(initialData ?? {})
 
     const [stateErrors, setErrors] = useState()
-    /*useEffect(() => {
-        let errors = columns.reduce((cols, columnName) => {
-            if (!stateData[columnName] || stateData[columnName] === "") {
-                cols[columnName] = "empty";
-            }
-            return cols;
-        }, {})
-        setErrors(errors)
-
-    }, [stateData])*/
 
     const handleClick = (event) => {
         event.preventDefault();

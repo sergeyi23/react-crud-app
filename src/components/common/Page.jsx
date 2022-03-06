@@ -1,22 +1,24 @@
 import React from "react";
 import Table from "./Table";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import stores from "../../services/reduxHelper";
 
-function Page({data, title, stateData, setData, service}) {
+function Page({title, stateData, setData, service}) {
+    const dispatch = useDispatch()
+    const store = stores[service]
+    const data = useSelector(state => store.getAll(state))
 
     const navigate = useNavigate()
     const getColumns = () => {
-        if (!stateData.length) {
+        if (!data.length) {
             return []
         }
-        return Object.keys(stateData[0])
+        return Object.keys(data[0])
     }
 
     const handleDelete = (index) => {
-        let temp = [...stateData]
-        temp.splice(index, 1)
-        const data = [...temp];
-        setData(data);
+        dispatch(store.delete(index))
     }
 
     const handleUpdate = (index) => {
@@ -26,16 +28,16 @@ function Page({data, title, stateData, setData, service}) {
     return (
         <div className="container">
             <h1 className="mt-2">{title} from Star Wars Universe</h1>
-            {stateData.length > 0 &&
+            {data.length > 0 &&
                 <Table
-                    data={stateData}
+                    data={data}
                     columns={getColumns()}
                     tableDescriptor={title}
                     onDeleteData={handleDelete}
                     onUpdateData={handleUpdate}
                 />
             }
-            {!stateData.length && <h1>Empty data!</h1>}
+            {!data.length && <h1>Empty data!</h1>}
         </div>
     );
 }
