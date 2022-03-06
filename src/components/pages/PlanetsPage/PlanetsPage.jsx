@@ -1,33 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Table from "../../common/Table";
-import {v1} from "uuid";
-import {getPlanets} from "../../../services/swApiService";
 import Button from "../../common/Button";
 import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchPlanets, removePlanet} from "../../../store/planets-reducer";
 
 export const PlanetsPage = () => {
 
-    const [planets, setPlanets] = useState(() => {
-        let localPlanetsData = JSON.parse(localStorage.getItem('planets'))
-        return (localPlanetsData) ? localPlanetsData : [];
-    });
+    const planets = useSelector(state => state.planets)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        const getData = async () => {
-            const data = await getPlanets()
-            setPlanets(data.map(planet => ({...planet, id: v1()})))
-        }
-
-        if (planets.length === 0) {
-            getData();
-        }
+        dispatch(fetchPlanets());
     }, [])
     useEffect(() => {
         localStorage.setItem('planets', JSON.stringify(planets))
     }, [planets])
 
     const deletePlanet = (id) => {
-        setPlanets(planets.filter(planet => planet.id !== id))
+        dispatch(removePlanet(id))
     }
     const getColumns = () => {
         if (planets.length === 0) {

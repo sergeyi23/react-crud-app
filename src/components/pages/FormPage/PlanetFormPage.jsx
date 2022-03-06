@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import Form from "../../common/Form";
-import {v1} from "uuid";
 import {useNavigate} from 'react-router-dom';
 import Joi from "joi";
+import {useDispatch, useSelector} from "react-redux";
+import {addPlanet, changePlanet} from "../../../store/planets-reducer";
 
 const planetsColumns = ["name", "rotation_period", "orbital_period", "diameter", "gravity", "population"];
 const schema = Joi.object({
@@ -18,10 +19,9 @@ const schema = Joi.object({
 
 export const PlanetFormPage = () => {
 
-    const [planets, setPlanets] = useState(() => {
-        let localPlanetsData = JSON.parse(localStorage.getItem('planets'))
-        return (localPlanetsData) ? localPlanetsData : [];
-    });
+    const planets = useSelector(state => state.planets)
+    const dispatch = useDispatch()
+
     const [formError, setFormError] = useState('');
 
     const params = useParams()
@@ -35,26 +35,24 @@ export const PlanetFormPage = () => {
             return cols;
         }, {})
     }
-    const addPlanet = (planetData) => {
+    const addPlanetWrapper = (planetData) => {
         const {error} = schema.validate(planetData)
         if (error) {
             setFormError(error.details[0].message)
             return;
         }
-        setPlanets([...planets, {...planetData, id: v1()}])
+        dispatch(addPlanet(planetData))
         setTimeout(() => {
             navigate('/planets')
         })
     }
-    const changePlanet = (planetData) => {
+    const changePlanetWrapper = (planetData) => {
         const {error} = schema.validate(planetData)
         if (error) {
             setFormError(error.details[0].message)
             return;
         }
-        setPlanets(planets.map(planet => {
-            return (planet.id === planetData.id) ? planetData : planet
-        }))
+        dispatch(changePlanet(planetData));
         setTimeout(() => {
             navigate('/planets')
         })
@@ -68,14 +66,14 @@ export const PlanetFormPage = () => {
         <Form
             columns={planetsColumns}
             initialData={getInitialPlanetsData()}
-            saveData={addPlanet}
+            saveData={addPlanetWrapper}
             formError={formError}
             setFormError={setFormError}
         />
         : <Form
             columns={planetsColumns}
             initialData={planets.find(planet => planet.id === planetId)}
-            saveData={changePlanet}
+            saveData={changePlanetWrapper}
             formError={formError}
             setFormError={setFormError}
         />
