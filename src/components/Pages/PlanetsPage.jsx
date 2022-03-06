@@ -1,56 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from "react-router-dom";
 import Table from "../common/Table";
-import Form from '../common/Form';
 
+import Button from '../common/Button';
 
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
-
-function PlanetsPage() {
-    const [planets, setPlanets] = useState(data);
-
-    const handleAddPlanet = (planetData) => {
-        const data = [...planets, planetData];
-        setPlanets(data)
-    }
+function PlanetsPage({ planets, setPlanets }) {
+    const columns = planets.length ? Object.keys(planets[0]) : [];
+    const path = "planets";
 
     const handleDeletePlanet = (id) => {
         const data = planets.filter((planet) => id !== planet.id);
         setPlanets(data)
     }
 
-    const getInitialPlanetsData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
-
     return (
         <div className="container">
-            <h1>PLANETS PAGE</h1>
+            <h1>Planets page</h1>
+            <Link to='/planets/new'>
+                <Button
+                    label="New Planet"
+                    classes="btn btn-success m-2"
+                />
+            </Link>
             { planets.length ? 
                 <Table
                 data={planets}
                 columns={columns}
                 onDeleteData={handleDeletePlanet}
                 tableDescriptor="Planets"
+                pathname={path}
                 />
                 : 
-                <h2>NO INFORMATION</h2>
+                <h2>no info</h2>
             }
-            <Form
-                initialData={getInitialPlanetsData()}
-                columns={columns}
-                onAddData={handleAddPlanet}
-            />
         </div>
     );
 }
 
-export default PlanetsPage; 
+export default PlanetsPage;
