@@ -1,33 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Table from "../../common/Table";
-import {v1} from "uuid";
-import {getStarships} from "../../../services/swApiService";
 import Button from "../../common/Button";
 import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchStarships, removeStarship} from "../../../store/starships-reducer";
 
 export const StarshipsPage = () => {
 
-    const [starships, setStarships] = useState(() => {
-        let localStarshipsData = JSON.parse(localStorage.getItem('starships'))
-        return (localStarshipsData) ? localStarshipsData : [];
-    });
+    const starships = useSelector(state => state.starships)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        const getData = async () => {
-            const data = await getStarships()
-            setStarships(data.map(starship => ({...starship, id: v1()})))
-        }
-
-        if (starships.length === 0) {
-            getData();
-        }
+        dispatch(fetchStarships())
     }, [])
     useEffect(() => {
         localStorage.setItem('starships', JSON.stringify(starships))
     }, [starships])
 
     const deleteStarship = (id) => {
-        setStarships(starships.filter(starship => starship.id !== id))
+        dispatch(removeStarship(id))
     }
     const getColumns = () => {
         if (starships.length === 0) {

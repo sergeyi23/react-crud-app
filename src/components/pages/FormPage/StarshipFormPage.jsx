@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import Form from "../../common/Form";
-import {v1} from "uuid";
 import {useNavigate} from 'react-router-dom';
 import Joi from "joi";
+import {useDispatch, useSelector} from "react-redux";
+import {addStarship, changeStarship} from "../../../store/starships-reducer";
 
 const starshipsColumns = ["name", "model", "manufacturer", "cost_in_credits", "length"];
 const schema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     model: Joi.string().min(3).max(50).required(),
-    manufacturer: Joi.string().min(3).max(50).required(),
+    manufacturer: Joi.string().min(3).max(100).required(),
     cost_in_credits: Joi.required(),
     length: Joi.number().required(),
     id: Joi.any(),
@@ -17,10 +18,9 @@ const schema = Joi.object({
 
 export const StarshipFormPage = () => {
 
-    const [starships, setStarships] = useState(() => {
-        let localStarshipsData = JSON.parse(localStorage.getItem('starships'))
-        return (localStarshipsData) ? localStarshipsData : [];
-    });
+    const starships = useSelector(state => state.starships)
+    const dispatch = useDispatch()
+
     const [formError, setFormError] = useState('');
 
     const params = useParams()
@@ -34,26 +34,24 @@ export const StarshipFormPage = () => {
             return cols;
         }, {})
     }
-    const addStarship = (starshipData) => {
+    const addStarshipWrapper = (starshipData) => {
         const {error} = schema.validate(starshipData)
         if (error) {
             setFormError(error.details[0].message)
             return;
         }
-        setStarships([...starships, {...starshipData, id: v1()}])
+        dispatch(addStarship(starshipData))
         setTimeout(() => {
             navigate('/starships')
         })
     }
-    const changeStarship = (starshipData) => {
+    const changeStarshipWrapper = (starshipData) => {
         const {error} = schema.validate(starshipData)
         if (error) {
             setFormError(error.details[0].message)
             return;
         }
-        setStarships(starships.map(starship => {
-            return (starship.id === starshipData.id) ? starshipData : starship
-        }))
+        dispatch(changeStarship(starshipData));
         setTimeout(() => {
             navigate('/starships')
         })
@@ -67,14 +65,14 @@ export const StarshipFormPage = () => {
         <Form
             columns={starshipsColumns}
             initialData={getInitialStarshipsData()}
-            saveData={addStarship}
+            saveData={addStarshipWrapper}
             formError={formError}
             setFormError={setFormError}
         />
         : <Form
             columns={starshipsColumns}
             initialData={starships.find(starship => starship.id === starshipId)}
-            saveData={changeStarship}
+            saveData={changeStarshipWrapper}
             formError={formError}
             setFormError={setFormError}
         />

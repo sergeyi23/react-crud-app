@@ -33,12 +33,13 @@ export const fetchPlanets = () => (dispatch) => {
     let localPlanetsData = JSON.parse(localStorage.getItem('planets'))
 
     if (localPlanetsData) {
-        if (localPlanetsData.length === 0){
+        if (localPlanetsData.length === 0) {
             getPlanets().then(data => {
                 dispatch(setPlanets(data.map(planet => ({
                     ...planet,
                     id: v1()
-                }))))})
+                }))))
+            })
         }
         dispatch(setPlanets(localPlanetsData))
     }
