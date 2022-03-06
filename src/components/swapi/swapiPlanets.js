@@ -28,6 +28,7 @@ export const planetRule = Joi.object({
 
   diameter: Joi.number()
       .required(),
+  beloved: Joi.boolean(),
   id: Joi.string()
 })
 
@@ -38,6 +39,6 @@ export const getPlanets = async () => {
   const planetResponse = await (await fetch(`${url}/planets`)).json();
 
   return  planetResponse.results.map(({name, surface_water, population, rotation_period, diameter}) => ({
-      name, surface_water, population, rotation_period, diameter, id: nanoid()
+    name, surface_water, population, rotation_period, diameter, beloved: false, id: nanoid()
   }))
 } 

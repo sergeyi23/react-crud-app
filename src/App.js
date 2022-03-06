@@ -1,4 +1,5 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useEffect }  from 'react';
+import { useDispatch } from 'react-redux';
 import {Routes,Route,Navigate} from "react-router-dom";
 import Navbar from './components/common/Navbar';
 import PeoplePage from './components/pages/PeoplePage';
@@ -11,18 +12,24 @@ import { getPeople, personRule, personColumns } from './components/swapi/swapiPe
 import { getPlanets, planetRule, planetColumns } from './components/swapi/swapiPlanets';
 import { getStarships, starshipRule, starshipColumns } from './components/swapi/swapiStarships';
 
+import { setPeople, addPerson, updatePerson } from './store/actions/people';
+import { setStarships, addStarship, updateStarship } from './store/actions/starships';
+import { setPlanets, addPlanet, updatePlanet } from './store/actions/planets';
+
+import { getAllPeople } from './store/selectors/people';
+import { getAllPlanets } from './store/selectors/planets';
+import { getAllStarships } from './store/selectors/starships';
+
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
-    const [people, setPeople] = useState([]);
-    const [planets, setPlanets] = useState([]);
-    const [starships, setStarships] = useState([]);
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
         const getData = async () => {
             const peopleData = await getPeople()
-            setPeople(peopleData)
+            dispatch(setPeople(peopleData));
         }
 
         getData()
@@ -31,7 +38,7 @@ function App() {
     useEffect(() => {
         const getData = async () => {
             const planetsData = await getPlanets()
-            setPlanets(planetsData)
+            dispatch(setPlanets(planetsData));
         }
 
         getData()
@@ -40,49 +47,40 @@ function App() {
     useEffect(() => {
         const getData = async () => {
             const starshipsData = await getStarships()
-            setStarships(starshipsData)
+            dispatch(setStarships(starshipsData));
         }
 
         getData()
     }, [])
 
-    useEffect( () => {
-        localStorage.setItem('people', JSON.stringify(people))
-    }, [people])
-
-    useEffect( () => {
-
-        localStorage.setItem('planets', JSON.stringify(planets))
-    }, [planets])
-
-    useEffect( () => {
-        localStorage.setItem('starships', JSON.stringify(starships))
-    }, [starships])
-
+    
     return (
         <>
             <Navbar />
             <Routes>
-                <Route path="/people/:id" element={<FormPage   setData={setPeople} 
-                    data={people} 
+                <Route path="/people/:id" element={<FormPage   addAction={addPerson} 
+                    updateAction={updatePerson} 
+                    selector={getAllPeople}
                     rule={personRule} 
                     columns={personColumns}
                     rootPath='/people'  />} />
-                <Route path="/people" element={<PeoplePage  setPeople={setPeople} people={people} />} />
+                <Route path="/people" element={<PeoplePage />} />
 
-                <Route path="/planets/:id" element={<FormPage setData={setPlanets} 
-                    data={planets} 
+                <Route path="/planets/:id" element={<FormPage  addAction={addPlanet} 
+                    updateAction={updatePlanet} 
+                    selector={getAllPlanets}
                     rule={planetRule}
                     columns={planetColumns}  
                     rootPath='/planets'  />} />
-                <Route path="/planets" element={ <PlanetsPage  setPlanets={setPlanets} planets={planets} />} />
+                <Route path="/planets" element={ <PlanetsPage />} />
 
-                <Route path="/starships/:id" element={<FormPage   setData={setStarships} 
-                    data={starships} 
+                <Route path="/starships/:id" element={<FormPage   addAction={addStarship} 
+                    updateAction={updateStarship} 
+                    selector={getAllStarships}
                     rule={starshipRule}
                     columns={starshipColumns} 
                     rootPath='/starships'  />} />
-                <Route path="/starships" element={<StarshipsPage  setStarships={setStarships} starships={starships} />} />
+                <Route path="/starships" element={<StarshipsPage />} />
 
                 <Route path="/" element={<Navigate to="/people" />} />
                 <Route path="*" element={<NotFoundPage/>}/>

@@ -2,14 +2,21 @@ import React from 'react';
 import { Link} from "react-router-dom";
 import Table from "../common/Table";
 import Button from '../common/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllStarships } from '../../store/selectors/starships';
+import { deleteStarship, changeBelovedStatus } from '../../store/actions/starships';
+import { getTableColumns } from './TableCol';
 
-function StarshipsPage({ starships, setStarships }) {
-    const columns = starships.length ? Object.keys(starships[0]) : [];
-    const path = "startships";
+function StarshipsPage() {
+    const dispatch = useDispatch();
+    const starships = useSelector(state => getAllStarships(state));
+
+    const handleBelovedStatus = id => {
+        dispatch(changeBelovedStatus(id));
+    }
 
     const handleDeleteStarship = (id) => {
-        const data = starships.filter((starship) => id !== starship.id);
-        setStarships(data)
+        dispatch(deleteStarship(id));
     }
 
     return (
@@ -21,17 +28,13 @@ function StarshipsPage({ starships, setStarships }) {
                     classes="btn btn-success m-2"
                 />
             </Link>
-            { starships.length ? 
-                <Table
-                data={starships}
-                columns={columns}
-                onDeleteData={handleDeleteStarship}
-                tableDescriptor="Starships"
-                pathname={path}
-                />
-                : 
-                <h2>no info</h2>
-            }
+            <Table
+            data={starships}
+            columns={getTableColumns(starships, 'starships', handleBelovedStatus)}
+            onDeleteData={handleDeleteStarship}
+            tableDescriptor="Starships"
+            pathname={'/starships'}
+            />
         </div>
     );
 }
