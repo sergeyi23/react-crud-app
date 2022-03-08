@@ -5,6 +5,8 @@ import EditForm from "../common/EditForm";
 
 const EditPersonForm = () => {
   const {
+    people,
+    tableName,
     selectedPerson,
     setSelectedPerson,
     columns,
@@ -15,8 +17,10 @@ const EditPersonForm = () => {
     <div>
       <h2 className="col-10 mx-auto py-2 text-center">EDIT PERSON DATA</h2>
       <EditForm
-        personData={selectedPerson}
-        setPersonData={setSelectedPerson}
+        people={people}
+        tableName={tableName}
+        itemData={selectedPerson}
+        setItemData={setSelectedPerson}
         columns={columns}
         onEditForm={handleEditPersonData}
         buttonTitle="Update person data"

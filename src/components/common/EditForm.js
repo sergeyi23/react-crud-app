@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { saveInLS } from "./../helpers/api";
 import { Button } from "react-bootstrap";
 import Input from "./Input";
 
+const lsKey = "people";
+
 const EditForm = ({
-  personData,
-  setPersonData,
+  people,
+  tableName,
+  itemData,
+  setItemData,
   columns,
   onEditForm,
   buttonTitle,
 }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
-
+  // console.log(itemData, [...Object.values(itemData)]);
+  // console.log(people);
   const handleClick = (event) => {
     event.preventDefault();
-    onEditForm(personData);
+    onEditForm(itemData);
+    saveInLS(lsKey, people);
+    console.log(people);
     setIsSuccess(true);
   };
 
   const handleChange = (event) => {
+    console.log(itemData);
     const { name, value } = event.currentTarget;
-    setPersonData({
-      ...personData,
+    setItemData({
+      ...itemData,
       [name]: value,
     });
   };
@@ -31,7 +40,7 @@ const EditForm = ({
   useEffect(() => {
     if (isSuccess) {
       const timer = setTimeout(() => {
-        navigate("/people");
+        navigate(`/${tableName}`);
       }, 1000);
       return () => {
         setIsSuccess(false);
@@ -47,22 +56,23 @@ const EditForm = ({
           SUCCESSFULLY UPDATED
         </h1>
       )}
-      {columns.map((columnName) => (
-        <Input
-          key={columnName}
-          name={columnName}
-          label={columnName}
-          value={personData[columnName]}
-          type="input"
-          onChange={handleChange}
-        />
-      ))}
+      {columns.map((columnName, i) => {
+        return columnName === "id" ? null : (
+          <div key={columnName}>
+            <Input
+              name={columnName}
+              label={columnName}
+              value={itemData[columnName]}
+              type="input"
+              onChange={handleChange}
+            />
+          </div>
+        );
+      })}
       <Button
         type="button"
-        disabled={[...Object.values(personData)].some(
-          (key) => key.trim() === ""
-        )}
-        className="btn btn-primary col-5 col-md-2 fs-4 px-2 mx-auto"
+        disabled={itemData && Object.values(itemData).some((key) => key === "")}
+        className="btn btn-primary col-8 col-md-3 fs-4 px-2 mx-auto"
         onClick={handleClick}
       >
         {buttonTitle}

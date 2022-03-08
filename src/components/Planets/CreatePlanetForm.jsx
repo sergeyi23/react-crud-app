@@ -1,17 +1,17 @@
 import React, { useContext, useState } from "react";
 
-import { PeopleContext } from "../contexts/PeopleContext";
+import { PlanetsContext } from "../contexts/PlanetsContext";
 import AddForm from "../common/AddForm";
 
-const CreatePersonForm = () => {
+const CreatePlanetForm = () => {
   const {
     tableName,
     getInitialData,
     columns,
-    handleAddPerson,
-    newPerson,
-    setNewPerson,
-  } = useContext(PeopleContext);
+    handleAddPlanet,
+    newPlanet,
+    setNewPlanet,
+  } = useContext(PlanetsContext);
 
   return (
     <div>
@@ -20,13 +20,13 @@ const CreatePersonForm = () => {
         tableName={tableName}
         initialData={getInitialData}
         columns={columns}
-        onAddData={handleAddPerson}
-        newData={newPerson}
-        createNewData={setNewPerson}
-        buttonTitle="Add new person"
+        onAddData={handleAddPlanet}
+        newData={newPlanet}
+        createNewData={setNewPlanet}
+        buttonTitle="Add new planet"
       />
     </div>
   );
 };
 
-export default CreatePersonForm;
+export default CreatePlanetForm;

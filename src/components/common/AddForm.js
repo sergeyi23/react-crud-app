@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Input from "./Input";
 
-const Form = ({
+const AddForm = ({
+  tableName,
   initialData,
   columns,
   onAddData,
@@ -32,8 +33,9 @@ const Form = ({
   useEffect(() => {
     if (isSuccess) {
       const timer = setTimeout(() => {
-        navigate("/people");
+        navigate(`/${tableName}`);
       }, 1000);
+
       return () => {
         setIsSuccess(false);
         clearTimeout(timer);
@@ -60,8 +62,11 @@ const Form = ({
       ))}
       <Button
         type="button"
-        disabled={[...Object.values(newData)].some((key) => key.trim() === "")}
-        className="btn btn-primary col-5 col-md-2 fs-4 px-2 mx-auto"
+        disabled={
+          newData &&
+          [...Object.values(newData)].some((key) => key.trim() === "")
+        }
+        className="btn btn-primary col-8 col-md-3 fs-4 px-2 mx-auto"
         onClick={handleClick}
       >
         {buttonTitle}
@@ -70,4 +75,4 @@ const Form = ({
   );
 };
 
-export default Form;
+export default AddForm;

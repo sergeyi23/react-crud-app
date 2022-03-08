@@ -4,15 +4,15 @@ import { NavLink } from "react-router-dom";
 
 function Table({
   tableName,
-  columns,
   data,
+  columns,
   tableDescriptor,
   onDeleteData,
-  setPerson,
+  setDataItem,
 }) {
   const handleClick = (id) => {
-    const person = data.find((p) => p.id === id);
-    setPerson(person);
+    const item = data.find((it) => it.id === id);
+    setDataItem(item);
   };
 
   return (
@@ -39,7 +39,7 @@ function Table({
                 >
                   <NavLink
                     to={`/${tableName}/${item["id"]}/edit`}
-                    className="text-white"
+                    className="text-white text-decoration-none"
                   >
                     {item[columnTitle]}
                   </NavLink>

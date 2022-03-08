@@ -15,16 +15,28 @@ const NavMenu = () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="d-lg-flex fs-6 col-md-8 justify-content-between fs-5">
-          <NavLink className="fs-6 fw-bold text-white" to="/">
+          <NavLink
+            className="fs-6 fw-bold text-white text-decoration-none"
+            to="/"
+          >
             Home
           </NavLink>
-          <NavLink className="fs-6 fw-bold text-white" to="/people">
+          <NavLink
+            className="fs-6 fw-bold text-white text-decoration-none"
+            to="/people"
+          >
             People
           </NavLink>
-          <NavLink className="fs-6 fw-bold text-white" to="/planets">
+          <NavLink
+            className="fs-6 fw-bold text-white text-decoration-none"
+            to="/planets"
+          >
             Planets
           </NavLink>
-          <NavLink className="fs-6 fw-bold text-white" to="/starships">
+          <NavLink
+            className="fs-6 fw-bold text-white text-decoration-none"
+            to="/starships"
+          >
             StarShips
           </NavLink>
         </Nav>
