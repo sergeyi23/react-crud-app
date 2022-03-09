@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import { PlanetsContext } from "../contexts/PlanetsContext";
 import AddForm from "../common/AddForm";
@@ -6,7 +6,7 @@ import AddForm from "../common/AddForm";
 const CreatePlanetForm = () => {
   const {
     tableName,
-    getInitialData,
+    initialData,
     columns,
     handleAddPlanet,
     newPlanet,
@@ -18,7 +18,7 @@ const CreatePlanetForm = () => {
       <h2 className="col-10 mx-auto py-2 text-center">CREATE NEW DATA</h2>
       <AddForm
         tableName={tableName}
-        initialData={getInitialData}
+        initialData={initialData}
         columns={columns}
         onAddData={handleAddPlanet}
         newData={newPlanet}

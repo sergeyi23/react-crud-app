@@ -23,7 +23,7 @@ const Input = ({ name, label, onChange, value, ...rest }) => {
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
-        onBlur={(e) => handleBlur(e)}
+        onBlur={handleBlur}
         id={name}
         name={name}
         value={value}

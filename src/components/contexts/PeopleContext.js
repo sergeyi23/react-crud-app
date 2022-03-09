@@ -1,5 +1,5 @@
 import { createContext, useState, useMemo, useCallback } from "react";
-import { saveInLS } from "./../helpers/api";
+import { saveInLS, getInitialData } from "./../helpers/api";
 export const PeopleContext = createContext();
 
 const tableName = "people";
@@ -7,27 +7,16 @@ const lsKey = "people";
 
 export const PeopleProvider = ({ children }) => {
   const [people, setPeople] = useState([]);
-
   const columns = people?.length ? Object.keys(people[0]) : [];
-
-  const getInitialData = () => {
-    return (
-      columns.length &&
-      columns.reduce((cols, columnName) => {
-        cols[columnName] = "";
-        return cols;
-      }, {})
-    );
-  };
-  const [selectedPerson, setSelectedPerson] = useState(getInitialData());
-
-  const [newPerson, setNewPerson] = useState(getInitialData());
+  const initialData = getInitialData(columns);
+  const [selectedPerson, setSelectedPerson] = useState(initialData);
+  const [newPerson, setNewPerson] = useState(initialData);
 
   const handleAddPerson = useCallback(
     (newPerson) => {
       const data = [...people, newPerson];
       setPeople((current) => data);
-      saveInLS(lsKey, [...people, newPerson]);
+      saveInLS(lsKey, data);
     },
     [people]
   );
@@ -50,18 +39,18 @@ export const PeopleProvider = ({ children }) => {
         }
         return person;
       });
-      setPeople((current) => newPeople);
-      saveInLS(lsKey, people);
+      setPeople((people) => newPeople);
     },
     [people]
   );
 
   const value = useMemo(
     () => ({
+      lsKey,
       tableName,
       people,
       setPeople,
-      getInitialData,
+      initialData,
       columns,
       handleAddPerson,
       handleDeletePerson,

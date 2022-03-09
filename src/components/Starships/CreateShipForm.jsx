@@ -6,7 +6,7 @@ import AddForm from "../common/AddForm";
 const CreateShipForm = () => {
   const {
     tableName,
-    getInitialData,
+    initialData,
     columns,
     handleAddShip,
     newShip,
@@ -18,7 +18,7 @@ const CreateShipForm = () => {
       <h2 className="col-10 mx-auto py-2 text-center">CREATE NEW DATA</h2>
       <AddForm
         tableName={tableName}
-        initialData={getInitialData}
+        initialData={initialData}
         columns={columns}
         onAddData={handleAddShip}
         newData={newShip}

@@ -1,16 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { StarshipsContext } from "../contexts/StarshipsContext";
 import EditForm from "../common/EditForm";
+import { saveInLS } from "./../helpers/api";
 
 const EditShipForm = () => {
   const {
+    lsKey,
+    ships,
     tableName,
     selectedShip,
     setSelectedShip,
     columns,
     handleEditShipData,
   } = useContext(StarshipsContext);
+
+  useEffect(() => {
+    return saveInLS(lsKey, ships);
+  });
 
   return (
     <div>

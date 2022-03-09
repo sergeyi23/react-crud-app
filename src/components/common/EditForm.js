@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { saveInLS } from "./../helpers/api";
 import { Button } from "react-bootstrap";
+
 import Input from "./Input";
 
-const lsKey = "people";
-
 const EditForm = ({
-  people,
   tableName,
   itemData,
   setItemData,
@@ -18,18 +14,13 @@ const EditForm = ({
 }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
-  // console.log(itemData, [...Object.values(itemData)]);
-  // console.log(people);
   const handleClick = (event) => {
     event.preventDefault();
     onEditForm(itemData);
-    saveInLS(lsKey, people);
-    console.log(people);
     setIsSuccess(true);
   };
 
   const handleChange = (event) => {
-    console.log(itemData);
     const { name, value } = event.currentTarget;
     setItemData({
       ...itemData,

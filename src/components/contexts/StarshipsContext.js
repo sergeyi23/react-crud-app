@@ -1,34 +1,23 @@
 import { createContext, useState, useMemo, useCallback } from "react";
+import { saveInLS, getInitialData } from "./../helpers/api";
 
 export const StarshipsContext = createContext();
 
-const data = [
-  { title: "Neptun", weight: "280", id: "1" },
-  { title: "SpaceX", weight: "155", id: "2" },
-  { title: "Hercules", weight: "335", id: "3" },
-];
-
-const columns = Object.keys(data[0]);
-
 const tableName = "starships";
+const lsKey = "starships";
 
 export const ShipsProvider = ({ children }) => {
-  const [ships, setShips] = useState(data);
-
-  const getInitialData = () => {
-    return columns.reduce((cols, columnName) => {
-      cols[columnName] = "";
-      return cols;
-    }, {});
-  };
+  const [ships, setShips] = useState([]);
+  const columns = ships?.length ? Object.keys(ships[0]) : [];
+  const initialData = getInitialData(columns);
   const [selectedShip, setSelectedShip] = useState(getInitialData());
-
-  const [newShip, setNewShip] = useState(getInitialData());
+  const [newShip, setNewShip] = useState(initialData);
 
   const handleAddShip = useCallback(
     (newShip) => {
       const data = [...ships, newShip];
-      setShips(data);
+      setShips((current) => data);
+      saveInLS(lsKey, data);
     },
     [ships]
   );
@@ -37,16 +26,17 @@ export const ShipsProvider = ({ children }) => {
     (id) => {
       const data = ships.filter((ship) => ship.id !== id);
       setShips(data);
+      saveInLS(lsKey, data);
     },
     [ships]
   );
 
   const handleEditShipData = useCallback(
-    ({ title, weight, id }) => {
+    ({ name, starship_class, passengers, id }) => {
       setShips((ships) =>
         ships.map((ship) => {
           if (ship.id === id) {
-            return { ...ship, title, weight, id };
+            return { ...ship, name, starship_class, passengers, id };
           }
           return ship;
         })
@@ -57,9 +47,11 @@ export const ShipsProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      lsKey,
       tableName,
       ships,
-      getInitialData,
+      setShips,
+      initialData,
       columns,
       handleAddShip,
       handleDeleteShip,
@@ -69,7 +61,7 @@ export const ShipsProvider = ({ children }) => {
       selectedShip,
       setSelectedShip,
     }),
-    [ships, newShip, selectedShip]
+    [ships, newShip, columns, selectedShip]
   );
 
   return (

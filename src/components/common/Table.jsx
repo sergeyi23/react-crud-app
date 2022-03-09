@@ -16,7 +16,7 @@ function Table({
   };
 
   return (
-    <table className="table table-dark col-11 col-md-8 col-xl-6 mx-auto">
+    <table className="table table-dark col-11 col-md-8 mx-auto">
       <thead>
         <tr>
           <th scope="col">{tableDescriptor}</th>

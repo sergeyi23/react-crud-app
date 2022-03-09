@@ -1,36 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { createRequest, getDataFromLS, saveInLS } from "./../helpers/api";
+
+import { getPeople, getDataFromLS } from "./../helpers/api";
 
 import Table from "../common/Table";
 import { PeopleContext } from "../contexts/PeopleContext";
 
 const PeoplePage = () => {
   const {
+    lsKey,
     tableName,
     people,
     setPeople,
     columns,
-    getInitialData,
-
     handleDeletePerson,
     setSelectedPerson,
   } = useContext(PeopleContext);
 
   const url = "https://swapi.dev/api/people";
-  const lsKey = "people";
   const dataFromLS = getDataFromLS(lsKey);
 
   useEffect(() => {
     const getData = async () => {
-      const data = await createRequest(url);
+      const data = await getPeople(url);
       setPeople((current) => data);
     };
-
     dataFromLS?.length > 0 ? setPeople(dataFromLS) : getData();
-    console.log(dataFromLS);
-    console.log(getInitialData());
   }, []);
 
   return (

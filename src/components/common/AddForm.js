@@ -19,7 +19,7 @@ const AddForm = ({
   const handleClick = (event) => {
     event.preventDefault();
     onAddData(newData);
-    createNewData(initialData());
+    createNewData(initialData);
     setIsSuccess(true);
   };
 
@@ -50,7 +50,7 @@ const AddForm = ({
           SUCCESSFULLY ADDED
         </h1>
       )}
-      {columns.map((columnName) => (
+      {columns?.map((columnName) => (
         <Input
           key={columnName}
           name={columnName}

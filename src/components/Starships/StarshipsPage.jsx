@@ -1,18 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
+
+import { getStarships, getDataFromLS } from "./../helpers/api";
 
 import Table from "../common/Table";
 import { StarshipsContext } from "../contexts/StarshipsContext";
 
 const StarshipsPage = () => {
   const {
+    lsKey,
     tableName,
     ships,
+    setShips,
     columns,
     handleDeleteShip,
     setSelectedShip,
   } = useContext(StarshipsContext);
+
+  const url = "https://swapi.dev/api/starships";
+  const dataFromLS = getDataFromLS(lsKey);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getStarships(url);
+      setShips((current) => data);
+    };
+    dataFromLS?.length > 0 ? setShips(dataFromLS) : getData();
+  }, []);
 
   return (
     <div>

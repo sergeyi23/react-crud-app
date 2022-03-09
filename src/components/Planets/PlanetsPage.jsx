@@ -1,18 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { getPlanets, getDataFromLS } from "./../helpers/api";
 
 import Table from "../common/Table";
 import { PlanetsContext } from "../contexts/PlanetsContext";
 
 const PlanetsPage = () => {
   const {
+    lsKey,
     tableName,
     planets,
+    setPlanets,
     columns,
     handleDeletePlanet,
     setSelectedPlanet,
   } = useContext(PlanetsContext);
+
+  const url = "https://swapi.dev/api/planets/";
+
+  const dataFromLS = getDataFromLS(lsKey);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getPlanets(url);
+      console.log(data);
+      setPlanets((current) => data);
+    };
+    dataFromLS?.length > 0 ? setPlanets(dataFromLS) : getData();
+  }, []);
 
   return (
     <div>

@@ -1,34 +1,22 @@
 import { createContext, useState, useMemo, useCallback } from "react";
-
+import { saveInLS, getInitialData } from "./../helpers/api";
 export const PlanetsContext = createContext();
 
-const data = [
-  { title: "Mercury", position: "1", id: "1" },
-  { title: "Venus", position: "2", id: "2" },
-  { title: "Earth", position: "3", id: "3" },
-];
-
-const columns = Object.keys(data[0]);
-
 const tableName = "planets";
+const lsKey = "planets";
 
 export const PlanetsProvider = ({ children }) => {
-  const [planets, setPlanets] = useState(data);
-
-  const getInitialData = () => {
-    return columns.reduce((cols, columnName) => {
-      cols[columnName] = "";
-      return cols;
-    }, {});
-  };
-  const [selectedPlanet, setSelectedPlanet] = useState(getInitialData());
-
-  const [newPlanet, setNewPlanet] = useState(getInitialData());
+  const [planets, setPlanets] = useState([]);
+  const columns = planets && planets.length ? Object.keys(planets[0]) : [];
+  const initialData = getInitialData(columns);
+  const [selectedPlanet, setSelectedPlanet] = useState(initialData);
+  const [newPlanet, setNewPlanet] = useState(initialData);
 
   const handleAddPlanet = useCallback(
     (newPlanet) => {
       const data = [...planets, newPlanet];
-      setPlanets(data);
+      setPlanets((current) => data);
+      saveInLS(lsKey, data);
     },
     [planets]
   );
@@ -37,16 +25,17 @@ export const PlanetsProvider = ({ children }) => {
     (id) => {
       const data = planets.filter((planet) => planet.id !== id);
       setPlanets(data);
+      saveInLS(lsKey, data);
     },
     [planets]
   );
 
   const handleEditPlanetData = useCallback(
-    ({ title, position, id }) => {
+    ({ name, orbital_period, population, id }) => {
       setPlanets((planets) =>
         planets.map((planet) => {
           if (planet.id === id) {
-            return { ...planet, title, position, id };
+            return { ...planet, name, orbital_period, population };
           }
           return planet;
         })
@@ -57,9 +46,11 @@ export const PlanetsProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      lsKey,
       tableName,
       planets,
-      getInitialData,
+      setPlanets,
+      initialData,
       columns,
       handleAddPlanet,
       handleDeletePlanet,
@@ -69,7 +60,7 @@ export const PlanetsProvider = ({ children }) => {
       selectedPlanet,
       setSelectedPlanet,
     }),
-    [planets, newPlanet, selectedPlanet]
+    [planets, newPlanet, columns, selectedPlanet]
   );
 
   return (
