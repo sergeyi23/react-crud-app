@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({onClick, label, classes, disabled, value}) => {
+const Button = ({onClick, label, classes, disabled, value ,image, size}) => {
     return (
         <button
         value={value}
@@ -9,6 +9,7 @@ const Button = ({onClick, label, classes, disabled, value}) => {
         className={classes}
         >
             {label}
+            {image && <img width={size} height={size} src={image} alt=""/>}
         </button>
     );
 };

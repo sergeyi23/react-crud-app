@@ -1,33 +1,56 @@
-import React, {useState} from 'react';
-import PeoplePage from "./components/pages/PeoplePage";
-import StarshipsPage from "./components/pages/StarshipsPage";
-import PlanetsPage from "./components/pages/PlanetsPage";
+import React, { useState } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+
+import DishesPage from "./components/pages/Dishes/DishesPage";
+import NewDishPage from "./components/pages/Dishes/NewDishPage";
+import UpdateDishPage from "./components/pages/Dishes/UpdateDishPage";
+
+import IngredientsPage from "./components/pages/Ingredients/IngredientsPage";
+import NewIngredientPage from "./components/pages/Ingredients/NewIngredientPage";
+import UpdateIngredientPage from "./components/pages/Ingredients/UpdateIngredientPage"
+
+import LoginPage from "./components/pages/LoginPage";
+
 import Navbar from "./components/common/Navbar";
-import { Route, Routes, Navigate } from 'react-router-dom'
+
+import { IsAdmin, IsOperator, getCookie} from "./services/authService";
 
 import 'bootstrap/dist/css/bootstrap.css';
 
-const people_cols = ['name', 'height', 'mass', 'gender', 'birth_year', 'id']
-const starships_cols = ['name', 'model', 'cost_in_credits', 'length', 'id']
-const planets_cols = ['name', 'rotation_period', 'orbital_period', 'diameter', 'climate', 'id']
 
 function App() {
-    const [people, setPeople] = useState([])
-    const [planets, setPlanets] = useState([])
-    const [starships, setStarships] = useState([])
+    const isAdmin = IsAdmin();
+    const isOperator = IsOperator();
+    const [loginStatus, setLoginStatus] = useState(getCookie() !== undefined);
 
     return (
         <div className="container">
-            <Navbar/>
+            <Navbar
+                loginStatus={loginStatus}
+                setLoginStatus={setLoginStatus}
+            />
             <Routes>
-                <Route path="/" element={<Navigate to={"/people"}/>} />
+                <Route path="/" element={<Navigate to={"/dishes"}/>} />
                 <Route path={"*"} element={<Navigate to={"/not-found"}/>} />
-                <Route path="/not-found" element={(<h2>Not Found</h2>)} />
+                <Route path="/not-found" element={(<h2>Страница не найдена</h2>)} />
 
-                <Route path="/people" element={<PeoplePage cols={people_cols} data={people} setter={setPeople} title="people"/>} />
-                <Route path="/starships" element={<StarshipsPage cols={starships_cols} data={starships} setter={setStarships} title="starships"/>} />
-                <Route path="/planets" element={<PlanetsPage cols={planets_cols} data={planets} setter={setPlanets} title="planets"/>} />
+                <Route path="/login" element={ <LoginPage setLoginStatus={setLoginStatus}/> } />
 
+                <Route path="/dishes" element={ <DishesPage/> } />
+                {(isOperator || isAdmin) && (
+                    <Route path="/dishes/new" element={ <NewDishPage/> } />
+                )}
+                {isAdmin && (
+                    <Route path="/dishes/update/:id" element={ <UpdateDishPage/> } />
+                )}
+
+                <Route path="/ingredients" element={ <IngredientsPage/> } />
+                {(isOperator || isAdmin) && (
+                    <Route path="/ingredients/new" element={ <NewIngredientPage/> } />
+                )}
+                {isAdmin && (
+                    <Route path="/ingredients/update/:id" element={ <UpdateIngredientPage/> } />
+                )}
             </Routes>
         </div>
     )

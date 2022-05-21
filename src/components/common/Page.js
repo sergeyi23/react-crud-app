@@ -1,48 +1,41 @@
 import React from 'react';
 import Table from "../common/Table";
-import Button from "../common/Button";
-import Form from "../common/Form";
+import {Link, useNavigate} from "react-router-dom";
 
-function Page({data, cols, setter, title, schema}) {
-    const columns = data === [] ? Object.keys(data[0]) : cols;
+function Page({ data, columns, setter, path, title }) {
 
-    const handleAppData = (newData) => {
-        localStorage.removeItem(title)
-        const d = [...data, newData];
-        localStorage.setItem(title, JSON.stringify(d))
-        setter(d)
-    }
+    const navigate = useNavigate()
 
     const handleRemoveData = (id) => {
-        localStorage.removeItem(title)
-        let newData = data.filter(item => item.id != id)
-        localStorage.setItem(title, JSON.stringify(newData))
-        setter(newData)
-    }
+        const newData = data.filter(item => item.id !== id);
+        setter(newData);
+    };
 
-    const getInitialData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
+    const handleSave = (event) => {
+        event.preventDefault();
+        console.log(data);
+    };
+
+    const handleUpdate = (index) => {
+        navigate(`/${path}/update/${index}`)
     }
 
     return (
-        <div className="container">
+        <div>
+            <h3>{title}</h3>
             {data.length > 0 ?
-                <Table
-                    tableData={data}
-                    columns={columns}
-                    tableDescriptor={title[0].toUpperCase() + title.slice(1)}
-                    onRemoveData={handleRemoveData}
-                />
-                : <h4>No data</h4>}
-            <Form
-                initialData={getInitialData()}
-                columns={columns}
-                onAddData={handleAppData}
-                schema={schema}
-            />
+                <div>
+                    <Table
+                        tableData={data}
+                        columns={columns}
+                        onRemoveData={handleRemoveData}
+                        onUpdateData={handleUpdate}
+                        onSave={handleSave}
+                    />
+                </div>
+                : <h4>Нет данных</h4>
+            }
+            <Link className="btn btn-outline-primary mt-2" role="button" to="new">Создать</Link>
         </div>
     );
 }
