@@ -9,6 +9,13 @@ import {
 import Select from "../../common/Select";
 import Input from "../../common/Input";
 import Button from "../../common/Button";
+import styled from "styled-components";
+
+const Error = styled.span`
+  margin-top: 10px;
+  color: orangered;
+  text-align: center;
+`;
 
 const DishPage = ({
     id,
@@ -26,6 +33,8 @@ const DishPage = ({
     const [selectedEquipments, setSelectedEquipments] = useState([]);
     const [selectedDishType, setSelectedDishType] = useState(data.dishType);
     const [selectedSeasonality, setSelectedSeasonality] = useState(data.seasonality);
+
+    const [error, setError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -108,10 +117,23 @@ const DishPage = ({
 
     const handleSave = async () => {
         const newData = {...data};
+
+        if (newData.name.length < 3
+            || newData.weight < 100
+            || newData.calories < 0
+            || newData.cookingTime < 5
+        ) {
+            setError(true);
+            return;
+        }
+        else setError(false);
+
         if (id !== undefined)
             newData.id = Number(id);
-        newData.dishType = selectedDishType;
-        newData.seasonality = selectedSeasonality;
+        if (selectedDishType !== undefined)
+            newData.dishType = selectedDishType;
+        if (selectedSeasonality !== undefined)
+            newData.seasonality = selectedSeasonality;
         newData.ingredients = selectedIngredients;
         newData.equipments = selectedEquipments;
         await operation(newData);
@@ -165,7 +187,7 @@ const DishPage = ({
                 <label>Ингредиенты</label>
                 <Select
                     name="ingredients"
-                    multiple="multiple"
+                    multiple="6"
                     data={ingredients}
                     onClick={handleChangeIngredients}
                 />
@@ -173,7 +195,7 @@ const DishPage = ({
                 <label>Оборудование для приготовления</label>
                 <Select
                     name="equipments"
-                    multiple="multiple"
+                    multiple="3"
                     data={equipments}
                     onClick={handleChangeEquipments}
                 />
@@ -200,6 +222,8 @@ const DishPage = ({
                     onChange={handleChange}
                 />
             </form>
+
+            {error && (<Error>Проверьте правильность введенных данных</Error>)}
 
             <Button
                 onClick={handleSave}

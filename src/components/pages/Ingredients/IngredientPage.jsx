@@ -6,6 +6,13 @@ import {
 import Select from "../../common/Select";
 import Input from "../../common/Input";
 import Button from "../../common/Button";
+import styled from "styled-components";
+
+const Error = styled.span`
+  margin-top: 10px;
+  color: orangered;
+  text-align: center;
+`;
 
 const IngredientPage = ({
                       id,
@@ -15,6 +22,7 @@ const IngredientPage = ({
                       operation
                   }) => {
     const [units, setUnits] = useState([]);
+    const [error, setError] = useState(false);
 
     const [selectedUnit, setSelectedUnit] = useState(data.unit);
 
@@ -57,15 +65,26 @@ const IngredientPage = ({
 
     const handleSave = async () => {
         const newData = {...data};
+
+        if (newData.name.length < 3
+            || newData.cost < 5
+            || newData.amount < 1
+        ) {
+            setError(true);
+            return;
+        }
+        else setError(false);
+
         if (id !== undefined)
             newData.id = Number(id);
-        newData.unit = selectedUnit;
+        if (selectedUnit !== undefined)
+            newData.unit = selectedUnit;
         await operation(newData);
         navigate('/ingredients')
     };
 
     return (
-        <div>
+        <div className="d-flex flex-column">
             <h4 className="mb-3">{title}</h4>
 
             <form>
@@ -111,10 +130,12 @@ const IngredientPage = ({
                 />
             </form>
 
+            {error && (<Error>Проверьте правильность введенных данных</Error>)}
+
             <Button
                 onClick={handleSave}
                 label="Сохранить"
-                classes="btn btn-outline-success my-4"
+                classes="btn btn-outline-success my-4 w-25"
             />
         </div>
     );

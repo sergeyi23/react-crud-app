@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getDishes } from "../../../services/dishesService";
+import { getDishes, deleteDishes } from "../../../services/dishesService";
 import Page from "../../common/Page";
 
-const DishesPage = () => {
+const DishesPage = ({ loginStatus }) => {
     const [data, setData] = useState([]);
 
     const columns = {
@@ -27,11 +27,13 @@ const DishesPage = () => {
 
     return (
         <Page
+            loginStatus={loginStatus}
             data={data}
             path="dishes"
             title="Блюда"
             columns={columns}
             setter={setData}
+            remove={deleteDishes}
         />
     );
 }

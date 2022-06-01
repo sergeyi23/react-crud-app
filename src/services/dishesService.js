@@ -2,6 +2,7 @@ const getDishesURL = 'https://localhost:7166/api/dishes/get';
 const getDishByIdURL = 'https://localhost:7166/api/dishes/get-by-id?id=';
 const updateDishURL = 'https://localhost:7166/api/dishes/update';
 const addDishURL = 'https://localhost:7166/api/dishes/add';
+const deleteURL = 'https://localhost:7166/api/dishes/delete';
 
 export const getDishes = async() => {
     return await (await fetch(getDishesURL)).json();
@@ -40,6 +41,17 @@ export const addDish = async(data) => {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
+            body: JSON.stringify(data)
+        });
+}
+
+export const deleteDishes = async(data) => {
+    return await fetch(deleteURL,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'DELETE',
             body: JSON.stringify(data)
         });
 }

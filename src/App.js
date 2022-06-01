@@ -10,6 +10,8 @@ import NewIngredientPage from "./components/pages/Ingredients/NewIngredientPage"
 import UpdateIngredientPage from "./components/pages/Ingredients/UpdateIngredientPage"
 
 import LoginPage from "./components/pages/LoginPage";
+import ProfilePage from "./components/pages/ProfilePage";
+import QueriesPage from "./components/pages/QueriesPage";
 
 import Navbar from "./components/common/Navbar";
 
@@ -21,13 +23,15 @@ import 'bootstrap/dist/css/bootstrap.css';
 function App() {
     const isAdmin = IsAdmin();
     const isOperator = IsOperator();
-    const [loginStatus, setLoginStatus] = useState(getCookie() !== undefined);
+    const [loginStatus, setLoginStatus] = useState(getCookie('role') !== undefined);
+    const login = getCookie('login');
 
     return (
         <div className="container">
             <Navbar
                 loginStatus={loginStatus}
                 setLoginStatus={setLoginStatus}
+                login={login}
             />
             <Routes>
                 <Route path="/" element={<Navigate to={"/dishes"}/>} />
@@ -36,7 +40,7 @@ function App() {
 
                 <Route path="/login" element={ <LoginPage setLoginStatus={setLoginStatus}/> } />
 
-                <Route path="/dishes" element={ <DishesPage/> } />
+                <Route path="/dishes" element={ <DishesPage loginStatus={loginStatus}/> } />
                 {(isOperator || isAdmin) && (
                     <Route path="/dishes/new" element={ <NewDishPage/> } />
                 )}
@@ -44,13 +48,18 @@ function App() {
                     <Route path="/dishes/update/:id" element={ <UpdateDishPage/> } />
                 )}
 
-                <Route path="/ingredients" element={ <IngredientsPage/> } />
+                <Route path="/ingredients" element={ <IngredientsPage loginStatus={loginStatus}/> } />
                 {(isOperator || isAdmin) && (
                     <Route path="/ingredients/new" element={ <NewIngredientPage/> } />
                 )}
                 {isAdmin && (
                     <Route path="/ingredients/update/:id" element={ <UpdateIngredientPage/> } />
                 )}
+
+                {loginStatus && (
+                    <Route path="/profile" element={ <ProfilePage/> } />
+                )}
+                <Route path="/queries" element={ <QueriesPage/> } />
             </Routes>
         </div>
     )

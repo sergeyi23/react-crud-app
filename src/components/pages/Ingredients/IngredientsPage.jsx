@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getIngredients} from "../../../services/ingredientsService";
+import { getIngredients, deleteIngredients } from "../../../services/ingredientsService";
 import Page from "../../common/Page";
 
-const IngredientsPage = () => {
+const IngredientsPage = ({loginStatus}) => {
     const [data, setData] = useState([]);
 
     const columns = {
@@ -27,6 +27,8 @@ const IngredientsPage = () => {
             title="Ингредиенты"
             columns={columns}
             setter={setData}
+            loginStatus={loginStatus}
+            remove={deleteIngredients}
         />
     );
 }

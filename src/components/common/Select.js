@@ -17,7 +17,7 @@ const Select = ({
             multiple={multiple}
             name={name}
             className="form-select mb-1"
-            size={multiple ? "3" : ""}
+            size={multiple || ""}
             onChange={onChange}
         >
             {/*{<option selected value={selectedValues.id}>{selectedValues.name}</option>}*/}

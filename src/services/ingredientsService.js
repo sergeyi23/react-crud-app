@@ -2,6 +2,7 @@ const getIngredientsURL = 'https://localhost:7166/api/ingredients/get';
 const getIngredientByIdURL = 'https://localhost:7166/api/ingredients/get-by-id?id=';
 const updateIngredientURL = 'https://localhost:7166/api/ingredients/update';
 const addIngredientURL = 'https://localhost:7166/api/ingredients/add';
+const deleteURL = 'https://localhost:7166/api/ingredients/delete';
 
 export const getIngredients = async() => {
     return await (await fetch(getIngredientsURL)).json();
@@ -36,6 +37,17 @@ export const addIngredient = async(data) => {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
+            body: JSON.stringify(data)
+        });
+}
+
+export const deleteIngredients = async(data) => {
+    return await fetch(deleteURL,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'DELETE',
             body: JSON.stringify(data)
         });
 }

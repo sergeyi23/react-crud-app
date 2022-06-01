@@ -41,7 +41,8 @@ const LoginPage = ({setLoginStatus}) => {
     const handleLogin = async() => {
         const response = await signIn(data);
         if (response.status) {
-            setCookie(response.role);
+            setCookie('role', response.role);
+            setCookie('login', response.login);
             setLoginStatus(true);
             navigate('/');
         }
