@@ -8,7 +8,8 @@ const QueriesPage = () => {
     const [dessertsWithoutEquipment, setDessertsWithoutEquipment] = useState([]);
     const [meatDishes, setMeatDishes] = useState([]);
     const [dishesBySeasonalities, setDishesBySeasonalities] = useState([]);
-    const [theMostCaloricDishes, setTheMostCaloricDishes] = useState([])
+    const [theMostCaloricDishes, setTheMostCaloricDishes] = useState([]);
+    const [usedIngredients, setUsedIngredients] = useState([]);
     const [dishTypes, setDishTypes] = useState([]);
     const [selectedDishType, setSelectedDishType] = useState(1);
 
@@ -22,6 +23,9 @@ const QueriesPage = () => {
 
             const dishes = await queries.getNumberOfDishesBySeasonality();
             setDishesBySeasonalities(dishes.result);
+
+            const ingredients = await queries.getUsedIngredients();
+            setUsedIngredients(ingredients.result);
 
             setDishTypes(await GetDishTypes());
         }
@@ -44,22 +48,22 @@ const QueriesPage = () => {
         <div>
             <h3>Запросы</h3>
 
-            <p>Получить список десертов, не требующих применения оборудования</p>
-            <ul className="mb-4">
+            <h6>Список десертов, не требующих применения оборудования:</h6>
+            <ul className="mb-5">
                 {dessertsWithoutEquipment.map(item => (
                     <li>{item}</li>
                 ))}
             </ul>
 
-            <p className="mt-5">Получить список мясных блюд, для приготовления которых необходима духовка</p>
-            <ul className="mb-4">
+            <h6>Список мясных блюд, для приготовления которых необходима духовка:</h6>
+            <ul className="mb-5">
                 {meatDishes.map(item => (
                     <li>{item}</li>
                 ))}
             </ul>
 
-            <p className="mt-5">Группировка блюд по сезонности</p>
-            <table className="table mb-4">
+            <h6>Группировка блюд по сезонности:</h6>
+            <table className="table mb-5 w-50">
                 <thead>
                     <tr>
                         <th scope="col">Сезонность</th>
@@ -77,10 +81,10 @@ const QueriesPage = () => {
                 </tbody>
             </table>
 
-            <p className="mt-4">Получить 3 самых калорийных блюда определённого типа</p>
-            <label className="mt-1">Тип блюда</label>
+            <h6 className="mt-5">3 самых калорийных блюда определённого типа:</h6>
+            <label>Тип блюда</label>
             <div className="row">
-                <div className="col-10">
+                <div className="col-4">
                 <Select
                     id="dishTypes"
                     name="dishTypes"
@@ -105,8 +109,27 @@ const QueriesPage = () => {
                     ))}
                 </ol>
             )
-            : <h6>Нет данных</h6>
+            : <p>Нет данных</p>
             }
+
+            <h6 className="mt-5">10 самых используемых ингредиентов:</h6>
+            <table className="table mb-4 w-50">
+                <thead>
+                <tr>
+                    <th scope="col">Ингредиент</th>
+                    <th scope="col">Количество использований</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {usedIngredients.map(item => (
+                    <tr key={item.name}>
+                        <td>{item.name}</td>
+                        <td>{item.number}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
         </div>
     )
 }

@@ -48,7 +48,7 @@ const IngredientPage = ({
         newData[input.name] = input.value;
         if (input.name === "amount")
         {
-            if (input.value > 1000) newData[input.name] = 1000;
+            if (input.value > 2000) newData[input.name] = 2000;
             if (input.value < 0) newData[input.name] = 1;
             if (input.value[0] === "0" && input.value.length > 1)
                 newData[input.name] = input.value.substring(1);
@@ -103,7 +103,7 @@ const IngredientPage = ({
                     name="amount"
                     label="Количество"
                     min="1"
-                    max="1000"
+                    max="2000"
                     value={data.amount}
                     type="number"
                     onChange={handleChange}

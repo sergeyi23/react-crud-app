@@ -50,7 +50,7 @@ function Table({columns, tableData, onRemoveData, onUpdateData, path, loginStatu
                 <a
                     href='https://localhost:7166/api/dishes/get-document'
                     download='Блюда.xlsx'
-                    className="btn btn-outline-success"
+                    className="btn btn-outline-success mb-3"
                 >
                     Получить отчёт
                 </a>
