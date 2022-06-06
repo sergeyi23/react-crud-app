@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getIngredients, deleteIngredients } from "../../../services/ingredientsService";
 import Page from "../../common/Page";
 
-const IngredientsPage = ({loginStatus}) => {
+const IngredientsPage = ({loginStatus, isAdmin}) => {
     const [data, setData] = useState([]);
 
     const columns = {
@@ -23,6 +23,7 @@ const IngredientsPage = ({loginStatus}) => {
     return (
         <Page
             data={data}
+            isAdmin={isAdmin}
             path="ingredients"
             title="Ингредиенты"
             columns={columns}

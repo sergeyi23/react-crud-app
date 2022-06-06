@@ -90,6 +90,7 @@ const ProfilePage = () => {
                             label="Логин"
                             maxLength="20"
                             type="text"
+                            width="100"
                             onChange={handleChange}
                         />
 
@@ -99,6 +100,7 @@ const ProfilePage = () => {
                             label="Пароль"
                             maxLength="20"
                             type="password"
+                            width="100"
                             onChange={handleChange}
                         />
                     </form>

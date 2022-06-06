@@ -59,8 +59,10 @@ const LoginPage = ({setLoginStatus}) => {
                     key="login"
                     name="login"
                     label="Логин"
+                    className="w-100"
                     maxLength="20"
                     type="text"
+                    width="100"
                     onChange={handleChange}
                 />
 
@@ -70,6 +72,7 @@ const LoginPage = ({setLoginStatus}) => {
                     label="Пароль"
                     maxLength="20"
                     type="password"
+                    width="100"
                     onChange={handleChange}
                 />
             </form>

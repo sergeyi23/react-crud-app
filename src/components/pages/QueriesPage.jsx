@@ -51,14 +51,14 @@ const QueriesPage = () => {
             <h6>Список десертов, не требующих применения оборудования:</h6>
             <ul className="mb-5">
                 {dessertsWithoutEquipment.map(item => (
-                    <li>{item}</li>
+                    <li key={item}>{item}</li>
                 ))}
             </ul>
 
             <h6>Список мясных блюд, для приготовления которых необходима духовка:</h6>
             <ul className="mb-5">
                 {meatDishes.map(item => (
-                    <li>{item}</li>
+                    <li key={item}>{item}</li>
                 ))}
             </ul>
 
@@ -90,6 +90,7 @@ const QueriesPage = () => {
                     name="dishTypes"
                     data={dishTypes}
                     selectedValues={1}
+                    width="100"
                     onChange={handleChangeDishType}
                 />
                 </div>
@@ -105,7 +106,7 @@ const QueriesPage = () => {
             (
                 <ol>
                     {theMostCaloricDishes.map(item => (
-                        <li>{item}</li>
+                        <li key={item}>{item}</li>
                     ))}
                 </ol>
             )

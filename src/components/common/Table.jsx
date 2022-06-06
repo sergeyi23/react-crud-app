@@ -3,7 +3,7 @@ import Button from "./Button";
 import editIcon from "./../../images/edit.png";
 import deleteIcon from "./../../images/delete.png";
 
-function Table({columns, tableData, onRemoveData, onUpdateData, path, loginStatus}) {
+function Table({columns, tableData, onRemoveData, onUpdateData, path, loginStatus, isAdmin}) {
     return (
         <div>
             <table className="table mb-4">
@@ -21,25 +21,22 @@ function Table({columns, tableData, onRemoveData, onUpdateData, path, loginStatu
                             <td key={item[columnTitle]+columnTitle}>{item[columnTitle]}</td>
                         ))}
                         {loginStatus && (
-                            <div className="d-inline-flex align-items-center">
-                                <td>
-                                    <Button
-                                        value={item.id}
-                                        size="36"
-                                        image={deleteIcon}
-                                        classes="btn btn-outline"
-                                        onClick={() => onRemoveData(item.id)}
-                                    />
-                                </td>
-                                <td>
-                                    <Button
-                                        image={editIcon}
-                                        size="28"
-                                        classes="btn btn-outline"
-                                        onClick={() => onUpdateData(item.id)}
-                                    />
-                                </td>
-                            </div>
+                            <td className="d-inline-flex align-items-center">
+                                <Button
+                                    value={item.id}
+                                    size="36"
+                                    image={deleteIcon}
+                                    classes="btn btn-outline"
+                                    onClick={() => onRemoveData(item.id)}
+                                />
+                                <Button
+                                    image={editIcon}
+                                    disabled={!isAdmin}
+                                    size="28"
+                                    classes="btn btn-outline"
+                                    onClick={() => onUpdateData(item.id)}
+                                />
+                            </td>
                         )}
                     </tr>
                 ))}

@@ -40,7 +40,7 @@ function App() {
 
                 <Route path="/login" element={ <LoginPage setLoginStatus={setLoginStatus}/> } />
 
-                <Route path="/dishes" element={ <DishesPage loginStatus={loginStatus}/> } />
+                <Route path="/dishes" element={ <DishesPage loginStatus={loginStatus} isAdmin={isAdmin}/> } />
                 {(isOperator || isAdmin) && (
                     <Route path="/dishes/new" element={ <NewDishPage/> } />
                 )}
@@ -48,7 +48,7 @@ function App() {
                     <Route path="/dishes/update/:id" element={ <UpdateDishPage/> } />
                 )}
 
-                <Route path="/ingredients" element={ <IngredientsPage loginStatus={loginStatus}/> } />
+                <Route path="/ingredients" element={ <IngredientsPage loginStatus={loginStatus} isAdmin={isAdmin}/> } />
                 {(isOperator || isAdmin) && (
                     <Route path="/ingredients/new" element={ <NewIngredientPage/> } />
                 )}

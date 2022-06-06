@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getDishes, deleteDishes } from "../../../services/dishesService";
 import Page from "../../common/Page";
 
-const DishesPage = ({ loginStatus }) => {
+const DishesPage = ({ loginStatus, isAdmin }) => {
     const [data, setData] = useState([]);
 
     const columns = {
@@ -28,6 +28,7 @@ const DishesPage = ({ loginStatus }) => {
     return (
         <Page
             loginStatus={loginStatus}
+            isAdmin={isAdmin}
             data={data}
             path="dishes"
             title="Блюда"

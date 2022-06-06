@@ -3,7 +3,7 @@ import Table from "../common/Table";
 import {Link, useNavigate} from "react-router-dom";
 import Button from "./Button";
 
-function Page({ data, columns, setter, path, title, loginStatus, remove }) {
+function Page({ data, columns, setter, path, title, loginStatus, remove, isAdmin }) {
 
     const navigate = useNavigate()
 
@@ -53,6 +53,7 @@ function Page({ data, columns, setter, path, title, loginStatus, remove }) {
                     onRemoveData={handleRemoveData}
                     onUpdateData={handleUpdate}
                     loginStatus={loginStatus}
+                    isAdmin={isAdmin}
                 />
             : <h4>Нет данных</h4>
             }
